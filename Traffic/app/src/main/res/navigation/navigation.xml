@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/start_dest">
+
+    <fragment
+        android:id="@+id/start_dest"
+        android:name="rs.elfak.mosis.trafficbuddy.StartFragment"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_start" />
+
+    <fragment
+        android:id="@+id/signUp_dest"
+        android:name="rs.elfak.mosis.trafficbuddy.SignUp"
+        android:label="fragment_signup"
+        tools:layout="@layout/fragment_sign_up" />
+
+</navigation>

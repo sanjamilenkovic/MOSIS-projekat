@@ -2,6 +2,9 @@ package rs.elfak.mosis.trafficbuddy;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -76,4 +79,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    public void setFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment, fragment)
+                .commit();
+    }
+
 }
