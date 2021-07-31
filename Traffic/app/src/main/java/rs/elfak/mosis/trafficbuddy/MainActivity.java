@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         firebaseAuth = Firebase.getFirebaseAuth();
-        firebaseAuth.signInWithEmailAndPassword("petar@gmail.com", "petar123")
+        firebaseAuth.createUserWithEmailAndPassword("sanja@gmail.com", "sanj12121a")
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -50,22 +50,22 @@ public class MainActivity extends AppCompatActivity {
 
                             String key = Firebase.getDbRef().push().getKey();
                             dbUser.setUid(key);
-                           Firebase.getDbRef().child(Firebase.DB_DISCOS).child(key).setValue(dbUser);
+                         //  Firebase.getDbRef().child(Firebase.DB_DISCOS).child(key).setValue(dbUser);
 
-                            byte[] b =new byte[23];
-                            Firebase.getStorageRef().child(Firebase.STORAGE_USER_PHOTOS).child("asd"+ "_" + new Date() + ".jpg").putBytes(b)
-                                    .addOnFailureListener(e ->  {
-                                        Toast.makeText(getApplicationContext(), "Couldn't upload image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                      //  signUpButton.setEnabled(true);
-                                    })
-                                    .addOnSuccessListener(ts -> {
-                                        ts.getMetadata().getReference().getDownloadUrl().addOnSuccessListener(dUrl -> {
-                                            dbUser.setImageUrl(dUrl.toString());
-                                            Firebase.getDbRef().child(Firebase.DB_USERS).child(uid).setValue(dbUser).addOnSuccessListener(unused -> {
-                                            //    updateUI(user);
-                                            });
-                                        });
-                                    });
+//                            byte[] b =new byte[23];
+//                            Firebase.getStorageRef().child(Firebase.STORAGE_USER_PHOTOS).child("asd"+ "_" + new Date() + ".jpg").putBytes(b)
+//                                    .addOnFailureListener(e ->  {
+//                                        Toast.makeText(getApplicationContext(), "Couldn't upload image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                      //  signUpButton.setEnabled(true);
+//                                    })
+//                                    .addOnSuccessListener(ts -> {
+//                                        ts.getMetadata().getReference().getDownloadUrl().addOnSuccessListener(dUrl -> {
+//                                            dbUser.setImageUrl(dUrl.toString());
+//                                            Firebase.getDbRef().child(Firebase.DB_USERS).child(uid).setValue(dbUser).addOnSuccessListener(unused -> {
+//                                            //    updateUI(user);
+//                                            });
+//                                        });
+//                                    });
 
 
 

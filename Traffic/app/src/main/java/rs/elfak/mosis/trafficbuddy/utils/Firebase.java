@@ -19,7 +19,7 @@ public class Firebase {
 
     // storage
     public static final String STORAGE_USER_PHOTOS = "users/photos";
-    public static final String STORAGE_DISCO_PHOTOS = "discos/photos";
+    public static final String STORAGE_DISCO_PHOTOS = "report/photos";
 
     private static StorageReference storageRef = FirebaseStorage.getInstance("gs://trafficbuddy-47de3.appspot.com").getReference();
 
