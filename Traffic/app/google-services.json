@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "83148638623",
+    "project_id": "trafficbuddy-47de3",
+    "storage_bucket": "trafficbuddy-47de3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83148638623:android:090defbc0f35a1c1c595aa",
+        "android_client_info": {
+          "package_name": "rs.elfak.mosis.trafficbuddy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "83148638623-csj7qninkc7o532l8be2qarucd6s0k0j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2Geu-GRFNRDYSART3pzmwGeaDYB8Uk2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "83148638623-csj7qninkc7o532l8be2qarucd6s0k0j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
