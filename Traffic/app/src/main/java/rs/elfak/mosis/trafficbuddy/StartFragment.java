@@ -2,63 +2,133 @@ package rs.elfak.mosis.trafficbuddy;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link StartFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class StartFragment extends Fragment {
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import org.jetbrains.annotations.NotNull;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+import rs.elfak.mosis.trafficbuddy.utils.Firebase;
 
-    public StartFragment() {
-        // Required empty public constructor
-    }
+import static android.content.ContentValues.TAG;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment StartFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static StartFragment newInstance(String param1, String param2) {
-        StartFragment fragment = new StartFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
+public class StartFragment extends Fragment implements View.OnClickListener {
+
+    Button singUpBtn;
+    private FirebaseAuth firebaseAuth;
+
+    private EditText emailEditText;
+    private EditText passwordEditText;
+    private Button signInButton;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        firebaseAuth = Firebase.getFirebaseAuth();
+
+
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if(currentUser != null){
+            currentUser.reload();
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_start, container, false);
+        View view =  inflater.inflate(R.layout.fragment_start, container, false);
+        singUpBtn = view.findViewById(R.id.button_sign_up);
+        singUpBtn.setOnClickListener(this);
+        return view;
     }
+    @Override
+    public void onClick(View view) {
+        Navigation.findNavController(view).navigate(R.id.action_start_dest_to_signUp_dest);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        emailEditText = getView().findViewById(R.id.edit_mail);
+        passwordEditText = getView().findViewById(R.id.edit_password);
+        signInButton = getView().findViewById(R.id.button_sign_in);
+
+        // listeners
+        emailEditText.addTextChangedListener(signUpTextWatcher);
+        passwordEditText.addTextChangedListener(signUpTextWatcher);
+
+        signInButton.setOnClickListener(signInButtonOnClickListener);
+    }
+
+    private TextWatcher signUpTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String emailInput = emailEditText.getText().toString().trim();
+            String passwordInput = passwordEditText.getText().toString().trim();
+
+            signInButton.setEnabled(!emailInput.isEmpty()
+                    && !passwordInput.isEmpty());
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
+    private View.OnClickListener signInButtonOnClickListener = v -> {
+        String email = emailEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            String uid = user.getUid();
+                            Toast.makeText(getActivity(), "Uspesno ste se ulogovali " ,
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(getActivity(), "Authentication failed: " + task.getException().getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    };
+
 }

@@ -2,7 +2,7 @@
     <string name="app_name">TrafficBuddy</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
-    <string name="username">Username</string>
+    <string name="email">Email</string>
     <string name="traffic_buddy">Traffic Buddy</string>
     <string name="name">Name</string>
     <string name="last_name">Last name</string>

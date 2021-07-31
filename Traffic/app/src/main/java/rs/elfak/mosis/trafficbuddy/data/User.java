@@ -9,6 +9,9 @@ public class User {
     private String password; // password stored for testing purposes
     private String email;
     private String name;
+    private String lastName;
+    private String phone;
+
     private String imageUrl;
     private String rank;
     private int rankPoints; // 0-2 newbie; 3-5 party guy; 6+ party monster
@@ -27,6 +30,15 @@ public class User {
     public void setRankPoints(int rankPoints) {
         this.rankPoints = rankPoints;
     }
+
+    public void setLastName(String lN) {
+        this.lastName = lN;
+    }
+    public void setPhoneNumber(String lN) {
+        this.phone = lN;
+    }
+
+
 
     public String getUsername() {
         return username;
