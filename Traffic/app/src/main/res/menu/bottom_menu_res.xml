@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <item android:id="@+id/fragment_map"
+        android:title="Map"
+        android:iconTint="@color/black"
+
+        android:icon="@drawable/ic_baseline_view_list_24"/>
+    <item android:id="@+id/friends_fragment"
+        android:title="Friends"
+        android:iconTint="@color/black"
+
+        android:icon="@drawable/ic_baseline_view_list_24"/>
+
+    <item android:id="@+id/rank_list_fragment"
+        android:title="Rank List"
+        android:icon="@drawable/ic_baseline_view_list_24"/>
+
+
+    <item android:id="@+id/reports_fragment"
+        android:title="Reports"
+        android:icon="@drawable/ic_baseline_view_list_24"/>
+
+    <item android:id="@+id/profile_fragment"
+        android:title="Profile"
+        android:icon="@drawable/ic_baseline_view_list_24"/>
+
+
+</menu>

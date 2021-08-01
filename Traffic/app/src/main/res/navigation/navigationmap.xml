@@ -3,13 +3,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigationmap"
-    app:startDestination="@id/start_dest">
+    app:startDestination="@id/fragment_map">
 
     <fragment
-        android:id="@+id/start_dest"
+        android:id="@+id/fragment_map"
         android:name="rs.elfak.mosis.trafficbuddy.MapFragment"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/friends_fragment"
+        android:name="rs.elfak.mosis.trafficbuddy.FriendsFragment"
+        android:label="fragment_friends"
+        tools:layout="@layout/fragment_friends" >
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/rank_list_fragment"
+        android:name="rs.elfak.mosis.trafficbuddy.RankListFragment"
+        android:label="fragment_rank_list"
+        tools:layout="@layout/fragment_rank_list" >
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/reports_fragment"
+        android:name="rs.elfak.mosis.trafficbuddy.ReportsFragment"
+        android:label="fragment_reports"
+        tools:layout="@layout/fragment_reports" >
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/profile_fragment"
+        android:name="rs.elfak.mosis.trafficbuddy.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
     </fragment>
 
 </navigation>

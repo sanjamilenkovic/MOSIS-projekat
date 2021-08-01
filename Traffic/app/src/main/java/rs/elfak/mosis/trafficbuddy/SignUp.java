@@ -182,7 +182,6 @@ public class SignUp extends Fragment {
                             dbUser.setName(name);
                             dbUser.setLastName(lastName);
                             dbUser.setPhoneNumber(phone);
-
                             dbUser.setPassword(password);
 
                            Firebase.getStorageRef().child(Firebase.STORAGE_USER_PHOTOS).child(email + "_" + new Date() + ".jpg").putBytes(imageBytes)

@@ -63,6 +63,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         View view =  inflater.inflate(R.layout.fragment_start, container, false);
         singUpBtn = view.findViewById(R.id.button_sign_up);
         singUpBtn.setOnClickListener(this);
+
         return view;
     }
     @Override
@@ -81,6 +82,8 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         emailEditText.addTextChangedListener(signUpTextWatcher);
         passwordEditText.addTextChangedListener(signUpTextWatcher);
 
+        emailEditText.setText("sanja@mail.com");
+        passwordEditText.setText("sanja123");
         signInButton.setOnClickListener(signInButtonOnClickListener);
     }
 

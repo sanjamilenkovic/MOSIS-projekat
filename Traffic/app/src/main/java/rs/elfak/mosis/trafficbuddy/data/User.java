@@ -34,6 +34,10 @@ public class User {
     public void setLastName(String lN) {
         this.lastName = lN;
     }
+    public String getLastName(){return this.lastName;}
+    public String getPhoneNumber(){
+       return this.phone;
+    }
     public void setPhoneNumber(String lN) {
         this.phone = lN;
     }
