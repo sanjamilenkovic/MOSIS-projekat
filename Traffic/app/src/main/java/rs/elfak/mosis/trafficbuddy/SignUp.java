@@ -3,6 +3,7 @@ package rs.elfak.mosis.trafficbuddy;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -48,6 +50,7 @@ public class SignUp extends Fragment {
     private EditText nameEditText;
     private EditText lastNameEditText;
     private EditText phoneEditText;
+    private ImageView imageView;
     private ImageButton imageButton;
 
 
@@ -70,6 +73,7 @@ public class SignUp extends Fragment {
         phoneEditText = getView().findViewById(R.id.edit_phone);
         signUpButton = getView().findViewById(R.id.button_sign_up);
         imageButton = getView().findViewById(R.id.image_button);
+        imageView = getView().findViewById(R.id.image_edit);
 
         phoneEditText.addTextChangedListener(signUpTextWatcher);
         passwordEditText.addTextChangedListener(signUpTextWatcher);
@@ -135,15 +139,15 @@ public class SignUp extends Fragment {
                         Object d = extras.get("data");
                         if (d != null) {
                             Bitmap img = (Bitmap)d;
-                            imageButton.setImageBitmap(img);
+                            imageView.setImageBitmap(img);
                         }
                     }
                 }
             });
 
     private View.OnClickListener imageButtonOnClickListener = v -> {
+        //dodati permisiju...
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        Toast.makeText(getActivity(), "clicked Photo", Toast.LENGTH_SHORT).show();
         mGetContent.launch(intent);
     };
 
@@ -157,7 +161,7 @@ public class SignUp extends Fragment {
         String password = passwordEditText.getText().toString();
         String email = emailEditText.getText().toString();
 
-        Bitmap image = ((BitmapDrawable)imageButton.getDrawable()).getBitmap();
+        Bitmap image = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] imageBytes = baos.toByteArray();

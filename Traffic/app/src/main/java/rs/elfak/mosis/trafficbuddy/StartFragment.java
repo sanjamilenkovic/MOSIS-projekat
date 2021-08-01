@@ -1,5 +1,6 @@
 package rs.elfak.mosis.trafficbuddy;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -44,8 +45,6 @@ public class StartFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         firebaseAuth = Firebase.getFirebaseAuth();
-
-
     }
     @Override
     public void onStart() {
@@ -119,8 +118,11 @@ public class StartFragment extends Fragment implements View.OnClickListener {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             String uid = user.getUid();
-                            Toast.makeText(getActivity(), "Uspesno ste se ulogovali " ,
+                            Toast.makeText(getActivity(), "Uspesno ste se ulogovali "+uid ,
                                     Toast.LENGTH_SHORT).show();
+                            //dodati shared prefferences i otvaranje novog activitija
+                            Intent intent = new Intent(getActivity(), MapActivity.class);
+                            startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
