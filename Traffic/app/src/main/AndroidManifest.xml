@@ -9,6 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TrafficBuddy">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAi1rBdN_tMQSmRWITWu_KhJuSNbWkgNwk" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
