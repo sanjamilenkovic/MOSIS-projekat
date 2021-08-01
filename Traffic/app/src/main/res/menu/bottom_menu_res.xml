@@ -6,16 +6,16 @@
         android:title="Map"
         android:iconTint="@color/black"
 
-        android:icon="@drawable/ic_baseline_view_list_24"/>
+        android:icon="@drawable/ic_baseline_map_24"/>
     <item android:id="@+id/friends_fragment"
         android:title="Friends"
         android:iconTint="@color/black"
 
-        android:icon="@drawable/ic_baseline_view_list_24"/>
+        android:icon="@drawable/ic_baseline_supervised_user_circle_24"/>
 
     <item android:id="@+id/rank_list_fragment"
         android:title="Rank List"
-        android:icon="@drawable/ic_baseline_view_list_24"/>
+        android:icon="@drawable/ic_baseline_grade_24"/>
 
 
     <item android:id="@+id/reports_fragment"
@@ -24,7 +24,7 @@
 
     <item android:id="@+id/profile_fragment"
         android:title="Profile"
-        android:icon="@drawable/ic_baseline_view_list_24"/>
+        android:icon="@drawable/ic_baseline_person_24"/>
 
 
 </menu>
