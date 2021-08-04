@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationTokenSource;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -45,6 +46,8 @@ public class MapFragment extends Fragment {
     private CancellationTokenSource cancellationTokenSource;
 
 
+    private FloatingActionButton addNewReport;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,6 +58,23 @@ public class MapFragment extends Fragment {
         mMapViewFullScreen.onCreate(savedInstanceState);
         mMapViewFullScreen.onResume(); // needed to get the map to display immediately
         cancellationTokenSource = new CancellationTokenSource();
+        addNewReport = view.findViewById(R.id.fab_add_report);
+
+        addNewReport.setOnClickListener(l -> {
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+                LocationServices.getFusedLocationProviderClient(getActivity()).getLastLocation()
+                        .addOnSuccessListener(location -> {
+
+                            LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                            Bundle addReportB = new Bundle();
+                            addReportB.putParcelable("currentLocation", currentLatLng);
+
+                            AddReportDialog ard= new AddReportDialog(getActivity(), addReportB);
+                            ard.show();
+                        });
+        });
+
+
 
 
         try {

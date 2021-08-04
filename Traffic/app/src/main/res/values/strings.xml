@@ -7,12 +7,17 @@
     <string name="name">Name</string>
     <string name="last_name">Last name</string>
     <string name="phone">Phone</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="my_profile" >My profile</string>
     <string name="save" >Save</string>
     <string name="rank" >Rank</string>
     <string name="rank_points" >Rank points</string>
+    <string name="description">Description</string>
+    <string name="title">Title</string>
+    <string name="lat">Lat</string>
+    <string name="lon">Lon</string>
+    <string name="add_report">Add report</string>
+    <string name="my_reports">My reports</string>
 
 
 </resources>
