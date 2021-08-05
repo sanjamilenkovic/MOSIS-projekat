@@ -6,10 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.core.Repo;
 
 import org.w3c.dom.Text;
@@ -23,19 +25,19 @@ import rs.elfak.mosis.trafficbuddy.data.Report;
 public class MyReportsAdapter extends RecyclerView.Adapter<MyReportsAdapter.ImageHolder> {
 
     private LayoutInflater mInflater;
-    private List<Report> list;
+    private List<Report> list  = new ArrayList<>();
+    private List<Report> myReports = new ArrayList<>();
+    private List<Report> allReports = new ArrayList<>();
+    private Context c;
 
     // data is passed into the constructor
-    public MyReportsAdapter(Context context) {
+    public MyReportsAdapter(Context context,List<Report> rs,List<Report> my) {
         this.mInflater = LayoutInflater.from(context);
-        list = new ArrayList<Report>(3);
-
-        Report r = new Report();
-        r.setIcon(R.drawable.sudar);
-        r.setTitle("Sudar");
-        list.add(r);
-
-
+        c = context;
+        myReports = my;
+        list.addAll(rs);
+        allReports.addAll(rs);
+        Toast.makeText(c,String.valueOf(allReports.size()),Toast.LENGTH_LONG).show();
     }
     // stores and recycles views as they are scrolled off screen
     public class ImageHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -68,15 +70,26 @@ public class MyReportsAdapter extends RecyclerView.Adapter<MyReportsAdapter.Imag
 
     @Override
     public void onBindViewHolder(@NonNull ImageHolder holder, int position) {
-        holder.myReportImageView.setImageResource(list.get(position).getIcon());
-        holder.myReportTextView.setText(list.get(position).getTitle());
-
+       // holder.myReportImageView.setImageResource(list.get(position).getIcon());
+       holder.myReportTextView.setText(list.get(position).getTitle());
     }
+
 
     @Override
     public int getItemCount() {
         return list.size();
     }
 
+    public void updateReportsList(Boolean flag){
+        if (flag) {
+            list.clear();
+            list.addAll(myReports);
+        }
+        else{
+            list.clear();
+            list.addAll(allReports);
+        }
+        notifyDataSetChanged();
+    }
 
 }

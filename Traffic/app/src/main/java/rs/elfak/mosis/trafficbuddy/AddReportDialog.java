@@ -56,7 +56,7 @@ public class AddReportDialog extends Dialog implements AddReportItemAdapter.Icon
         newReport = new Report();
 
         adapter = new AddReportItemAdapter(getContext());
-        //adapter.setClickListener(this);
+        adapter.setIconClickListener(this);
         recyclerView.setAdapter(adapter);
 
 

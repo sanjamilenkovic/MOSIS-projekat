@@ -1,6 +1,8 @@
 package rs.elfak.mosis.trafficbuddy;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -34,8 +36,11 @@ import com.squareup.picasso.Target;
 import java.util.ArrayList;
 import java.util.List;
 
+import rs.elfak.mosis.trafficbuddy.data.Report;
 import rs.elfak.mosis.trafficbuddy.data.User;
+import rs.elfak.mosis.trafficbuddy.services.RealTimeLocationService;
 import rs.elfak.mosis.trafficbuddy.utils.Firebase;
+import rs.elfak.mosis.trafficbuddy.viewmodel.ReportsViewModel;
 
 public class MapFragment extends Fragment {
 
@@ -44,9 +49,50 @@ public class MapFragment extends Fragment {
     private List<MarkerOptions> googleMapMarkers;
     private List<Target> markerTargets;
     private CancellationTokenSource cancellationTokenSource;
-
-
+    private ReportsViewModel viewModel;
     private FloatingActionButton addNewReport;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel = new ViewModelProvider(this).get(ReportsViewModel.class);
+
+        viewModel.getReports().observe(this, reports -> {
+            googleMapMarkers = new ArrayList<>();
+            markerTargets = new ArrayList<>();
+            googleMap.clear();
+
+            for (int i = 0; i < reports.size(); i++) {
+                Report d = reports.get(i);
+                markerTargets.add(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        MarkerOptions marker = new MarkerOptions();
+                        marker.position(new LatLng(d.getLat(), d.getLon()));
+                        marker.title(d.getTitle());
+                        marker.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                        marker.snippet(d.getId());
+
+                        googleMapMarkers.add(marker);
+                        googleMap.addMarker(marker);
+                        googleMap.setOnInfoWindowClickListener(reportClickListener);
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                    }
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    }
+                });
+
+                Picasso.get().load(R.drawable.radovi).resize(50, 50).into(markerTargets.get(i));
+            }
+        });
+    }
+    GoogleMap.OnInfoWindowClickListener reportClickListener = marker -> {
+        Toast.makeText(getContext(),marker.getTitle(),Toast.LENGTH_SHORT).show();
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +105,7 @@ public class MapFragment extends Fragment {
         mMapViewFullScreen.onResume(); // needed to get the map to display immediately
         cancellationTokenSource = new CancellationTokenSource();
         addNewReport = view.findViewById(R.id.fab_add_report);
+
 
         addNewReport.setOnClickListener(l -> {
             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
@@ -95,30 +142,12 @@ public class MapFragment extends Fragment {
                 // For zooming automatically to the current user location of the marker
                 zoomToLastKnownLocation(googleMap);
             }
-
-
             if (googleMapMarkers != null) {
                 for (MarkerOptions marker : googleMapMarkers)
                     googleMap.addMarker(marker);
             }
-
-            // For dropping a marker at a point on the Map
-            LatLng sydney = new LatLng(43.32, 21.89);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("2"));
-
-            sydney = new LatLng(43.52, 21.89);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("1"));
-            googleMap.setOnInfoWindowClickListener(friendClickListener);
-            //kada se klikne na dialog iznad markera...ide se friendClickListener, tu je zasad samo Toast
-            //dodati otvaranje fragmenta ili forme, mzda bolje fragment
         });
         return view;
-    }
-
-    GoogleMap.OnInfoWindowClickListener friendClickListener = marker -> {
-        String friendId = marker.getSnippet();
-        Bundle bundle = new Bundle();
-        Toast.makeText(getContext(), friendId, Toast.LENGTH_LONG).show();
     };
 
     public GoogleMap getGoogleMapFriends() {
@@ -131,11 +160,10 @@ public class MapFragment extends Fragment {
                     .addOnSuccessListener(location -> {
                         if (location != null) {
                             LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            CameraPosition cameraPosition = new CameraPosition.Builder().target(currentLatLng).zoom(8).build();
+                            CameraPosition cameraPosition = new CameraPosition.Builder().target(currentLatLng).zoom(14).build();
                             //menjanje zoom-a ovde
                             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                         }
                     });
     }
-
 }

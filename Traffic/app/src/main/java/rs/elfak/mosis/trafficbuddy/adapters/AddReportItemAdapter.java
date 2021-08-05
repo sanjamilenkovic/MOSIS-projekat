@@ -55,6 +55,10 @@ public class AddReportItemAdapter extends RecyclerView.Adapter<AddReportItemAdap
 
         }
     }
+    public void setIconClickListener(IconClickListener i)
+    {
+        iconClickListener = i;
+    }
 
     @NonNull
     @Override
