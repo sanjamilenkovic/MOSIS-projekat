@@ -17,8 +17,8 @@ import rs.elfak.mosis.trafficbuddy.R;
 public class AddReportItemAdapter extends RecyclerView.Adapter<AddReportItemAdapter.ImageHolder> {
 
     private Integer selectedPosition = -1;
-    private LayoutInflater mInflater;
-    private List<Integer> list;
+    private final LayoutInflater mInflater;
+    private final List<Integer> list;
     private IconClickListener iconClickListener;
 
     // data is passed into the constructor
@@ -35,7 +35,7 @@ public class AddReportItemAdapter extends RecyclerView.Adapter<AddReportItemAdap
     // stores and recycles views as they are scrolled off screen
     public class ImageHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView myImageView;
+        final ImageView myImageView;
 
         ImageHolder(View itemView) {
             super(itemView);

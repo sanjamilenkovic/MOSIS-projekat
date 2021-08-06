@@ -3,7 +3,6 @@ package rs.elfak.mosis.trafficbuddy;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -51,8 +50,6 @@ public class SignUp extends Fragment {
     private EditText lastNameEditText;
     private EditText phoneEditText;
     private ImageView imageView;
-    private ImageButton imageButton;
-
 
 
     @Override
@@ -72,7 +69,7 @@ public class SignUp extends Fragment {
         lastNameEditText = getView().findViewById(R.id.edit_last_name);
         phoneEditText = getView().findViewById(R.id.edit_phone);
         signUpButton = getView().findViewById(R.id.button_sign_up);
-        imageButton = getView().findViewById(R.id.image_button);
+        ImageButton imageButton = getView().findViewById(R.id.image_button);
         imageView = getView().findViewById(R.id.image_edit);
 
         phoneEditText.addTextChangedListener(signUpTextWatcher);
@@ -92,7 +89,7 @@ public class SignUp extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sign_up, container, false);
     }
-    private TextWatcher signUpTextWatcher = new TextWatcher() {
+    private final TextWatcher signUpTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -130,7 +127,7 @@ public class SignUp extends Fragment {
             currentUser.reload();
         }
     }
-    ActivityResultLauncher<Intent> mGetContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+    final ActivityResultLauncher<Intent> mGetContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 Intent data = result.getData();
                 if (data != null) {
@@ -145,14 +142,14 @@ public class SignUp extends Fragment {
                 }
             });
 
-    private View.OnClickListener imageButtonOnClickListener = v -> {
+    private final View.OnClickListener imageButtonOnClickListener = v -> {
         //dodati permisiju...
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
         mGetContent.launch(intent);
     };
 
 
-    private View.OnClickListener signupButtonOnClickListener = v -> {
+    private final View.OnClickListener signupButtonOnClickListener = v -> {
         signUpButton.setEnabled(false);
 
         String lastName = lastNameEditText.getText().toString();

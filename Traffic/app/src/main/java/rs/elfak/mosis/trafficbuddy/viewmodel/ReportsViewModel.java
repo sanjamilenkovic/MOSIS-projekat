@@ -4,26 +4,22 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-
 import rs.elfak.mosis.trafficbuddy.data.Report;
 import rs.elfak.mosis.trafficbuddy.data.User;
 import rs.elfak.mosis.trafficbuddy.utils.Firebase;
 
 public class ReportsViewModel extends ViewModel {
 
-    MutableLiveData<List<Report>> reports = new MutableLiveData<List<Report>>();
-    private DatabaseReference reportDbRef;
+    final MutableLiveData<List<Report>> reports = new MutableLiveData<List<Report>>();
+    final MutableLiveData<List<User>> allUsers = new MutableLiveData<>();
+    private final DatabaseReference reportDbRef;
 
     public ReportsViewModel() {
         reportDbRef = Firebase.getDbRef();
@@ -36,7 +32,40 @@ public class ReportsViewModel extends ViewModel {
         return reports;
     }
 
-    ValueEventListener reportValueListener = new ValueEventListener() {
+    public LiveData<List<User>> getAllUsers() {
+
+        if (allUsers.getValue() == null) {
+            reportDbRef.child(Firebase.DB_USERS).addValueEventListener(userEventListener);
+            }
+        return allUsers;
+        }
+
+
+    final ValueEventListener userEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+
+            if (snapshot.exists()) {
+                allUsers.postValue(toUsers(snapshot));
+            }
+        }
+        private List<User> toUsers(DataSnapshot snapshot) {
+            List<User> uss = new ArrayList<>();
+            for (DataSnapshot discoSnapshot : snapshot.getChildren()) {
+                User rep = discoSnapshot.getValue(User.class);
+                uss.add(rep);
+            }
+
+            return uss;
+        }
+
+        @Override
+        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+        }
+    };
+
+    final ValueEventListener reportValueListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
             if (snapshot.exists()) {

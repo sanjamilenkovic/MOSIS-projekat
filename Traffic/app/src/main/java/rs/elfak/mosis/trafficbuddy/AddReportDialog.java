@@ -20,16 +20,11 @@ import rs.elfak.mosis.trafficbuddy.utils.Firebase;
 
 public class AddReportDialog extends Dialog implements AddReportItemAdapter.IconClickListener {
 
-    public Activity c;
+    public final Activity c;
     public Dialog d;
 
-    private AddReportItemAdapter adapter;
-    private EditText editLon;
-    private EditText editLat;
-    private EditText editTitle;
     private EditText editDescription;
-    private LatLng latLng;
-    private Button buttonAddReport;
+    private final LatLng latLng;
     private Report newReport;
 
 
@@ -55,16 +50,16 @@ public class AddReportDialog extends Dialog implements AddReportItemAdapter.Icon
 
         newReport = new Report();
 
-        adapter = new AddReportItemAdapter(getContext());
+        AddReportItemAdapter adapter = new AddReportItemAdapter(getContext());
         adapter.setIconClickListener(this);
         recyclerView.setAdapter(adapter);
 
 
-        editTitle = findViewById(R.id.edit_text_title);
+        EditText editTitle = findViewById(R.id.edit_text_title);
         editDescription = findViewById(R.id.edit_text_description);
-        editLon = findViewById(R.id.edit_text_lon);
-        editLat = findViewById(R.id.edit_text_lat);
-        buttonAddReport = findViewById(R.id.btn_add_report);
+        EditText editLon = findViewById(R.id.edit_text_lon);
+        EditText editLat = findViewById(R.id.edit_text_lat);
+        Button buttonAddReport = findViewById(R.id.btn_add_report);
 
         editLon.setText(latLng.longitude + "");
         editLon.setEnabled(false);
@@ -72,7 +67,7 @@ public class AddReportDialog extends Dialog implements AddReportItemAdapter.Icon
         editLat.setEnabled(false);
 
 
-        buttonAddReport.setOnClickListener( btn -> {
+        buttonAddReport.setOnClickListener(btn -> {
             FirebaseUser loggedInUser = Firebase.getFirebaseAuth().getCurrentUser();
             if (loggedInUser != null) {
                 String currentUserId = loggedInUser.getUid();

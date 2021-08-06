@@ -6,15 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.core.Repo;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,26 +18,23 @@ import rs.elfak.mosis.trafficbuddy.data.Report;
 
 public class MyReportsAdapter extends RecyclerView.Adapter<MyReportsAdapter.ImageHolder> {
 
-    private LayoutInflater mInflater;
-    private List<Report> list  = new ArrayList<>();
-    private List<Report> myReports = new ArrayList<>();
-    private List<Report> allReports = new ArrayList<>();
-    private Context c;
+    private final LayoutInflater mInflater;
+    private final List<Report> list  = new ArrayList<>();
+    private List<Report> myReports;
+    private final List<Report> allReports = new ArrayList<>();
 
     // data is passed into the constructor
     public MyReportsAdapter(Context context,List<Report> rs,List<Report> my) {
         this.mInflater = LayoutInflater.from(context);
-        c = context;
         myReports = my;
         list.addAll(rs);
         allReports.addAll(rs);
-        Toast.makeText(c,String.valueOf(allReports.size()),Toast.LENGTH_LONG).show();
     }
     // stores and recycles views as they are scrolled off screen
-    public class ImageHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ImageHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView myReportImageView;
-        TextView myReportTextView;
+        final ImageView myReportImageView;
+        final TextView myReportTextView;
 
         ImageHolder(View itemView) {
             super(itemView);

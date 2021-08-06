@@ -1,32 +1,22 @@
 package rs.elfak.mosis.trafficbuddy.services;
 
 import android.Manifest;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
-import android.widget.Toast;
-
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
 
-import rs.elfak.mosis.trafficbuddy.MainActivity;
-import rs.elfak.mosis.trafficbuddy.R;
+import org.jetbrains.annotations.NotNull;
+
 import rs.elfak.mosis.trafficbuddy.utils.Firebase;
 
 public class RealTimeLocationService extends Service {
@@ -45,7 +35,7 @@ public class RealTimeLocationService extends Service {
         createLocationRequest();
         locationCallback = new LocationCallback() {
             @Override
-            public void onLocationResult(LocationResult locationResult) {
+            public void onLocationResult(@NotNull LocationResult locationResult) {
                 if (locationResult == null) {
                     return;
                 }

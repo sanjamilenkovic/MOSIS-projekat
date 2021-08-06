@@ -41,7 +41,8 @@
         app:layout_constraintBottom_toTopOf="@+id/name_bck"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline_15" />
+        app:layout_constraintTop_toTopOf="@id/guideline_15"
+        android:focusable="true" />
 
 
     <Button

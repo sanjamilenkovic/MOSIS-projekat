@@ -11,7 +11,7 @@ public class Firebase {
     public static final String DB_USERS = "users"; // "tables"
     public static final String DB_REPORTS = "reports"; // "tables"
 
-    private static DatabaseReference dbRef = FirebaseDatabase.getInstance("https://trafficbuddy-47de3-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+    private static final DatabaseReference dbRef = FirebaseDatabase.getInstance("https://trafficbuddy-47de3-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
     public static DatabaseReference getDbRef() {
         return dbRef;
@@ -21,14 +21,14 @@ public class Firebase {
     public static final String STORAGE_USER_PHOTOS = "users/photos";
     public static final String STORAGE_DISCO_PHOTOS = "report/photos";
 
-    private static StorageReference storageRef = FirebaseStorage.getInstance("gs://trafficbuddy-47de3.appspot.com").getReference();
+    private static final StorageReference storageRef = FirebaseStorage.getInstance("gs://trafficbuddy-47de3.appspot.com").getReference();
 
     public static StorageReference getStorageRef() {
         return storageRef;
     }
 
     // auth
-    private static FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private static final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     public static FirebaseAuth getFirebaseAuth() {
         return firebaseAuth;

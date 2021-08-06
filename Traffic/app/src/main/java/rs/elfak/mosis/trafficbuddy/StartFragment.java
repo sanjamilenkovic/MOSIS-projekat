@@ -87,7 +87,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         signInButton.setOnClickListener(signInButtonOnClickListener);
     }
 
-    private TextWatcher signUpTextWatcher = new TextWatcher() {
+    private final TextWatcher signUpTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -108,7 +108,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         }
     };
 
-    private View.OnClickListener signInButtonOnClickListener = v -> {
+    private final View.OnClickListener signInButtonOnClickListener = v -> {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 

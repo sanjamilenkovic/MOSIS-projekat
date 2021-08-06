@@ -1,8 +1,6 @@
 package rs.elfak.mosis.trafficbuddy;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -15,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.Button;
 
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -29,7 +27,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationTokenSource;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -38,74 +35,119 @@ import java.util.List;
 
 import rs.elfak.mosis.trafficbuddy.data.Report;
 import rs.elfak.mosis.trafficbuddy.data.User;
-import rs.elfak.mosis.trafficbuddy.services.RealTimeLocationService;
-import rs.elfak.mosis.trafficbuddy.utils.Firebase;
 import rs.elfak.mosis.trafficbuddy.viewmodel.ReportsViewModel;
 
 public class MapFragment extends Fragment {
 
-    private MapView mMapViewFullScreen;
     private GoogleMap googleMap;
+    private Boolean flag = true;
     private List<MarkerOptions> googleMapMarkers;
     private List<Target> markerTargets;
     private CancellationTokenSource cancellationTokenSource;
-    private ReportsViewModel viewModel;
-    private FloatingActionButton addNewReport;
 
     @Override
     public void onResume() {
         super.onResume();
-        viewModel = new ViewModelProvider(this).get(ReportsViewModel.class);
 
-        viewModel.getReports().observe(this, reports -> {
-            googleMapMarkers = new ArrayList<>();
-            markerTargets = new ArrayList<>();
-            googleMap.clear();
+        ReportsViewModel viewModel = new ViewModelProvider(this).get(ReportsViewModel.class);
+        if(flag) {
+            viewModel.getAllUsers().observe(getViewLifecycleOwner(), user -> {
+                googleMapMarkers = new ArrayList<>();
+                markerTargets = new ArrayList<>();
+                googleMap.clear();
+                for (int i = 0; i < user.size(); i++) {
+                    User u = user.get(i);
+                    markerTargets.add(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            MarkerOptions marker = new MarkerOptions();
+                            marker.position(new LatLng(u.getLat(), u.getLon()));
+                            marker.title(u.getName());
+                            marker.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                            marker.snippet(u.getUid());
 
-            for (int i = 0; i < reports.size(); i++) {
-                Report d = reports.get(i);
-                markerTargets.add(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        MarkerOptions marker = new MarkerOptions();
-                        marker.position(new LatLng(d.getLat(), d.getLon()));
-                        marker.title(d.getTitle());
-                        marker.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
-                        marker.snippet(d.getId());
+                            googleMapMarkers.add(marker);
+                            googleMap.addMarker(marker);
+                            googleMap.setOnInfoWindowClickListener(userClickListener);
+                        }
 
-                        googleMapMarkers.add(marker);
-                        googleMap.addMarker(marker);
-                        googleMap.setOnInfoWindowClickListener(reportClickListener);
-                    }
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
 
-                    @Override
-                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                    }
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-                    }
-                });
+                        }
 
-                Picasso.get().load(R.drawable.radovi).resize(50, 50).into(markerTargets.get(i));
-            }
-        });
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        }
+                    });
+
+
+                    Picasso.get().load(u.getImageUrl()).resize(50, 50).into(markerTargets.get(i));
+                }
+
+            });
+        }
+        else {
+            viewModel.getReports().observe(getViewLifecycleOwner(), reports -> {
+                googleMapMarkers = new ArrayList<>();
+                markerTargets = new ArrayList<>();
+                googleMap.clear();
+
+                for (int i = 0; i < reports.size(); i++) {
+                    Report d = reports.get(i);
+                    markerTargets.add(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            MarkerOptions marker = new MarkerOptions();
+                            marker.position(new LatLng(d.getLat(), d.getLon()));
+                            marker.title(d.getTitle());
+                            marker.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                            marker.snippet(d.getId());
+
+                            googleMapMarkers.add(marker);
+                            googleMap.addMarker(marker);
+                            googleMap.setOnInfoWindowClickListener(reportClickListener);
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        }
+                    });
+
+
+                    Picasso.get().load(R.drawable.radovi).resize(50, 50).into(markerTargets.get(i));
+                }
+            });
+        }
     }
-    GoogleMap.OnInfoWindowClickListener reportClickListener = marker -> {
-        Toast.makeText(getContext(),marker.getTitle(),Toast.LENGTH_SHORT).show();
+
+    final GoogleMap.OnInfoWindowClickListener reportClickListener = marker -> {
     };
+
+    final GoogleMap.OnInfoWindowClickListener userClickListener = marker -> {
+    };
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-
-        mMapViewFullScreen = view.findViewById(R.id.googleMapView);
+        Button changeView = view.findViewById(R.id.changeView);
+        MapView mMapViewFullScreen = view.findViewById(R.id.googleMapView);
         mMapViewFullScreen.onCreate(savedInstanceState);
         mMapViewFullScreen.onResume(); // needed to get the map to display immediately
         cancellationTokenSource = new CancellationTokenSource();
-        addNewReport = view.findViewById(R.id.fab_add_report);
+        FloatingActionButton addNewReport = view.findViewById(R.id.fab_add_report);
 
+        changeView.setOnClickListener(p ->{
+            flag = !flag;
+            onResume();
+        });
 
         addNewReport.setOnClickListener(l -> {
             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
@@ -116,12 +158,10 @@ public class MapFragment extends Fragment {
                             Bundle addReportB = new Bundle();
                             addReportB.putParcelable("currentLocation", currentLatLng);
 
-                            AddReportDialog ard= new AddReportDialog(getActivity(), addReportB);
+                            AddReportDialog ard = new AddReportDialog(getActivity(), addReportB);
                             ard.show();
                         });
         });
-
-
 
 
         try {
@@ -148,7 +188,9 @@ public class MapFragment extends Fragment {
             }
         });
         return view;
-    };
+    }
+
+    ;
 
     public GoogleMap getGoogleMapFriends() {
         return googleMap;
