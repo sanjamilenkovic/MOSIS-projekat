@@ -97,7 +97,7 @@ public class ReportDialog extends Dialog {
                 newRating.setId(key);
 
 
-                Firebase.getDbRef().child(Firebase.DB_REPORTS).child(key).setValue(newRating);
+                Firebase.getDbRef().child("ratings").child(key).setValue(newRating);
 
             } else
                 thumbUp.setColorFilter(c.getResources().getColor(R.color.white));

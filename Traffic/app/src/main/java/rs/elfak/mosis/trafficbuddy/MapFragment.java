@@ -128,15 +128,13 @@ public class MapFragment extends Fragment {
                         }
                     });
 
-//                    Resources resources = getContext().getResources();
-//                    final int resourceId = resources.getIdentifier(reports.get(i).getIconTitle(), "drawable",
-//                            getContext().getPackageName());
-//
-//                    Drawable draw = resources.getDrawable(resourceId);
-//                    Picasso.get().load(String.valueOf(draw)).resize(50, 50).into(markerTargets.get(i));
+                    Resources resources = getContext().getResources();
+                    final int resourceId = resources.getIdentifier(reports.get(i).getIconTitle(), "drawable",
+                            getContext().getPackageName());
+
+                    Picasso.get().load(resourceId).resize(50, 50).into(markerTargets.get(i));
 
 
-                    Picasso.get().load(R.drawable.radovi).resize(50, 50).into(markerTargets.get(i));
                 }
             });
         }
@@ -153,6 +151,7 @@ public class MapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Toast.makeText(getContext(),"onCrateView",Toast.LENGTH_LONG).show();
         View view = inflater.inflate(R.layout.fragment_map, container, false);
         Button changeView = view.findViewById(R.id.changeView);
         MapView mMapViewFullScreen = view.findViewById(R.id.googleMapView);
