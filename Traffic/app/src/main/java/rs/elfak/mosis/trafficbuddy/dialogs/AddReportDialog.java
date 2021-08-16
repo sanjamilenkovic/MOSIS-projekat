@@ -30,6 +30,7 @@ public class AddReportDialog extends Dialog implements AddReportItemAdapter.Icon
     private Report newReport;
 
 
+
     public AddReportDialog(Activity a, Bundle b) {
         super(a);
         this.c = a;
