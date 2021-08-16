@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/pozadina"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/blank_bg"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profilePicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20sp"
+        android:src="@drawable/sudar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/pozadina"
+        app:layout_constraintTop_toTopOf="@id/pozadina" />
+
+
+
+    <TextView
+        android:id="@+id/imePrezime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sanja Milenkovic"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="casual"
+        app:layout_constraintTop_toBottomOf="@id/profilePicture"
+        app:layout_constraintStart_toStartOf="@id/pozadina"
+        app:layout_constraintEnd_toEndOf="@id/pozadina"
+        />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\@sanja"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="casual"
+        app:layout_constraintTop_toBottomOf="@id/imePrezime"
+        app:layout_constraintStart_toStartOf="@id/pozadina"
+        app:layout_constraintEnd_toEndOf="@id/pozadina"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,12 +1,16 @@
 package rs.elfak.mosis.trafficbuddy.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -18,35 +22,47 @@ public class AddReportItemAdapter extends RecyclerView.Adapter<AddReportItemAdap
 
     private Integer selectedPosition = -1;
     private final LayoutInflater mInflater;
-    private final List<Integer> list;
+    private final Context c;
+    private final List<String> listaImena;
     private IconClickListener iconClickListener;
 
     // data is passed into the constructor
     public AddReportItemAdapter(Context context) {
+
+        this.c = context;
         this.mInflater = LayoutInflater.from(context);
-        list = new ArrayList<Integer>(2);
-        list.add(R.drawable.guzva);
-        list.add(R.drawable.sudar);
-        list.add(R.drawable.radovi);
-        list.add(R.drawable.kamera);
-        list.add(R.drawable.zatvoren);
-        list.add(R.drawable.oprez);
+        listaImena = new ArrayList<String>(2);
+
+        listaImena.add("guzva");
+        listaImena.add("sudar");
+        listaImena.add("radovi");
+        listaImena.add("kamera");
+        listaImena.add("zatvoren");
+        listaImena.add("oprez");
     }
+
     // stores and recycles views as they are scrolled off screen
     public class ImageHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         final ImageView myImageView;
 
+        @RequiresApi(api = Build.VERSION_CODES.Q)
         ImageHolder(View itemView) {
             super(itemView);
             myImageView = itemView.findViewById(R.id.image1);
 
-            myImageView.setOnClickListener(im ->{
-
-                Integer position = (Integer) myImageView.getTag();
+            myImageView.setOnClickListener(im -> {
+                String nazivDrawable = (String) myImageView.getTag();
+                for (int i=0; i<5; i++)
+                {
+                    if (nazivDrawable.equals(listaImena.get(i)))
+                    {
+                        selectedPosition = i;
+                    }
+                }
                 notifyDataSetChanged();
-                selectedPosition = (Integer) position;//dobro selektuje poziciju samo treba da se prosledi i upise u bazu
-                iconClickListener.onIconClick(selectedPosition);
+
+                iconClickListener.onIconClick(nazivDrawable);
             });
         }
 
@@ -55,11 +71,12 @@ public class AddReportItemAdapter extends RecyclerView.Adapter<AddReportItemAdap
 
         }
     }
-    public void setIconClickListener(IconClickListener i)
-    {
+
+    public void setIconClickListener(IconClickListener i) {
         iconClickListener = i;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @NonNull
     @Override
     public ImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -69,23 +86,37 @@ public class AddReportItemAdapter extends RecyclerView.Adapter<AddReportItemAdap
 
     @Override
     public void onBindViewHolder(@NonNull ImageHolder holder, int position) {
+
         if (position == selectedPosition) {
             holder.myImageView.setAlpha((float) 0.35);
         } else
             holder.myImageView.setAlpha((float) 1.0);
-        holder.myImageView.setImageResource(list.get(position));
-        holder.myImageView.setTag(position);
 
+        //ako pamtim po id-ju
+//        holder.myImageView.setImageResource(list.get(position));
+//        holder.myImageView.setTag(position);
+
+
+        Resources resources = c.getResources();
+        final int resourceId = resources.getIdentifier(listaImena.get(position), "drawable",
+                c.getPackageName());
+        Drawable d = resources.getDrawable(resourceId);
+        holder.myImageView.setImageDrawable(d);
+
+
+        holder.myImageView.setTag(listaImena.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return listaImena.size();
     }
 
 
     // parent activity will implement this method to respond to click events
     public interface IconClickListener {
-        void onIconClick(int position);
+        void onIconClick(String naziv);
     }
+
+
 }

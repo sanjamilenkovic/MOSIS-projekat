@@ -10,6 +10,7 @@ public class Firebase {
     // realtime db
     public static final String DB_USERS = "users"; // "tables"
     public static final String DB_REPORTS = "reports"; // "tables"
+    public static final String DB_RATINGS = "ratings"; // "tables"
 
     private static final DatabaseReference dbRef = FirebaseDatabase.getInstance("https://trafficbuddy-47de3-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 

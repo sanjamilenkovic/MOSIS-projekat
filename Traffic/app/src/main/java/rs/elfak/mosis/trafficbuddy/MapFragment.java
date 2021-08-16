@@ -2,6 +2,7 @@ package rs.elfak.mosis.trafficbuddy;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -10,10 +11,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -27,6 +30,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationTokenSource;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.core.Repo;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -35,6 +40,9 @@ import java.util.List;
 
 import rs.elfak.mosis.trafficbuddy.data.Report;
 import rs.elfak.mosis.trafficbuddy.data.User;
+import rs.elfak.mosis.trafficbuddy.dialogs.AddReportDialog;
+import rs.elfak.mosis.trafficbuddy.dialogs.ReportDialog;
+import rs.elfak.mosis.trafficbuddy.utils.Firebase;
 import rs.elfak.mosis.trafficbuddy.viewmodel.ReportsViewModel;
 
 public class MapFragment extends Fragment {
@@ -48,6 +56,7 @@ public class MapFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Toast.makeText(getContext(), "onResume", Toast.LENGTH_SHORT).show();
 
         ReportsViewModel viewModel = new ViewModelProvider(this).get(ReportsViewModel.class);
         if(flag) {
@@ -101,6 +110,7 @@ public class MapFragment extends Fragment {
                             MarkerOptions marker = new MarkerOptions();
                             marker.position(new LatLng(d.getLat(), d.getLon()));
                             marker.title(d.getTitle());
+
                             marker.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
                             marker.snippet(d.getId());
 
@@ -117,6 +127,13 @@ public class MapFragment extends Fragment {
                         public void onPrepareLoad(Drawable placeHolderDrawable) {
                         }
                     });
+
+//                    Resources resources = getContext().getResources();
+//                    final int resourceId = resources.getIdentifier(reports.get(i).getIconTitle(), "drawable",
+//                            getContext().getPackageName());
+//
+//                    Drawable draw = resources.getDrawable(resourceId);
+//                    Picasso.get().load(String.valueOf(draw)).resize(50, 50).into(markerTargets.get(i));
 
 
                     Picasso.get().load(R.drawable.radovi).resize(50, 50).into(markerTargets.get(i));
@@ -160,6 +177,7 @@ public class MapFragment extends Fragment {
 
                             AddReportDialog ard = new AddReportDialog(getActivity(), addReportB);
                             ard.show();
+
                         });
         });
 

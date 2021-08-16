@@ -13,18 +13,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import rs.elfak.mosis.trafficbuddy.adapters.AddReportItemAdapter;
 import rs.elfak.mosis.trafficbuddy.adapters.MyReportsAdapter;
 import rs.elfak.mosis.trafficbuddy.data.Report;
+import rs.elfak.mosis.trafficbuddy.dialogs.ReportDialog;
 import rs.elfak.mosis.trafficbuddy.viewmodel.ReportsViewModel;
 
 
-public class ReportsFragment extends Fragment {
+public class ReportsFragment extends Fragment implements MyReportsAdapter.ReportClickListener {
 
     private RecyclerView recyclerView;
     private MyReportsAdapter adapter;
@@ -73,5 +76,11 @@ public class ReportsFragment extends Fragment {
             recyclerView.setAdapter(adapter);
         }
     };
+
+    @Override
+    public void onReportClick() {
+        Toast.makeText(getContext(), "nesto", Toast.LENGTH_SHORT).show();
+    }
+
 
 }

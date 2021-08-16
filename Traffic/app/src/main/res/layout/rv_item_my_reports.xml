@@ -8,21 +8,24 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@drawable/rounded_corner_white"
-        app:layout_constraintBottom_toBottomOf="@id/image_report"
+        android:layout_height="80dp"
+        android:alpha="0.60"
+        android:id="@+id/corner"
+        android:background="@drawable/a"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image_report"
         android:layout_marginLeft="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        app:layout_constraintStart_toStartOf="@id/corner"
+        app:layout_constraintTop_toTopOf="@id/corner"
+        app:layout_constraintBottom_toBottomOf="@id/corner"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:src="@drawable/guzva">
-    </ImageView>
+    </de.hdodenhof.circleimageview.CircleImageView>
 
 
     <TextView
@@ -35,9 +38,9 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/image_report"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/corner"
         app:layout_constraintStart_toEndOf="@id/image_report"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/image_report" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

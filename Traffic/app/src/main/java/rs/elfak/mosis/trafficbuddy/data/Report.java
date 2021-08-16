@@ -9,6 +9,7 @@ public class Report {
     private String description;
     private String reportedById;
     private Integer icon;
+    private String iconTitle;
 
     public String getId() {
         return id;
@@ -30,6 +31,12 @@ public class Report {
 
     public void setTitle(String t) {
         this.title = t;
+    }
+
+    public String getIconTitle() { return iconTitle; }
+
+    public void setIconTitle(String t) {
+        this.iconTitle = t;
     }
 
     public double getLat() {

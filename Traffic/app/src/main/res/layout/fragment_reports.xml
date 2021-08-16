@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:elevation="2dp"
         android:fontFamily="casual"
-        android:text="Reports"
+        android:text="@string/reports"
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="35sp"
@@ -29,16 +29,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="20dp"
         android:id="@+id/rv_report_image_holder"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/my_reports"
+        app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/rv_item_my_reports" />
 
     <Button

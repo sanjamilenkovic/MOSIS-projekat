@@ -1,5 +1,6 @@
 package rs.elfak.mosis.trafficbuddy.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -19,6 +20,7 @@ public class User {
     private List<String> friends;
 
     public User() {
+        friends = new ArrayList<String>(1);
         updateRankBasedOnCurrentPoints();
     }
 
@@ -129,12 +131,22 @@ public class User {
         this.lat = lat;
     }
 
-    public List<String> getFriends() {
-        return friends;
+    public ArrayList<String> getFriends() {
+        return (ArrayList<String>) friends;
     }
 
-    public void setFriends (List<String> friends) {
+    public void setFriends (ArrayList<String> friends) {
+        this.friends.clear();
         this.friends = friends;
+    }
+
+    public void setNewFriend (String newFriend) {
+        Integer currentNum;
+        if (friends.size() == 0)
+             currentNum = 0;
+        else
+            currentNum = friends.size();
+        this.friends.add(currentNum, newFriend);
     }
 }
 

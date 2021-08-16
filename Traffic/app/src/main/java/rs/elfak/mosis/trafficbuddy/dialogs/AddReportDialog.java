@@ -1,8 +1,10 @@
-package rs.elfak.mosis.trafficbuddy;
+package rs.elfak.mosis.trafficbuddy.dialogs;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseUser;
 
+import rs.elfak.mosis.trafficbuddy.R;
 import rs.elfak.mosis.trafficbuddy.adapters.AddReportItemAdapter;
 import rs.elfak.mosis.trafficbuddy.data.Report;
 import rs.elfak.mosis.trafficbuddy.utils.Firebase;
@@ -23,7 +26,6 @@ public class AddReportDialog extends Dialog implements AddReportItemAdapter.Icon
     public final Activity c;
     public Dialog d;
 
-    private EditText editDescription;
     private final LatLng latLng;
     private Report newReport;
 
@@ -34,6 +36,7 @@ public class AddReportDialog extends Dialog implements AddReportItemAdapter.Icon
         latLng = b.getParcelable("currentLocation");
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +59,7 @@ public class AddReportDialog extends Dialog implements AddReportItemAdapter.Icon
 
 
         EditText editTitle = findViewById(R.id.edit_text_title);
-        editDescription = findViewById(R.id.edit_text_description);
+        EditText editDescription = findViewById(R.id.edit_text_description);
         EditText editLon = findViewById(R.id.edit_text_lon);
         EditText editLat = findViewById(R.id.edit_text_lat);
         Button buttonAddReport = findViewById(R.id.btn_add_report);
@@ -99,8 +102,8 @@ public class AddReportDialog extends Dialog implements AddReportItemAdapter.Icon
     }
 
     @Override
-    public void onIconClick(int position) {
-        newReport.setIcon(position);
+    public void onIconClick(String naziv) {
+        newReport.setIconTitle(naziv);
     }
 
 }

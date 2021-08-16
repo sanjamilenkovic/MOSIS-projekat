@@ -1,15 +1,16 @@
 package rs.elfak.mosis.trafficbuddy;
 
+import android.bluetooth.BluetoothAdapter;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -34,15 +35,14 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view =  inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        userPhoto =  view.findViewById(R.id.image_edit);
+        userPhoto = view.findViewById(R.id.image_edit);
         userName = view.findViewById(R.id.edit_name);
         userLastName = view.findViewById(R.id.edit_last_name);
         userMail = view.findViewById(R.id.edit_mail);
         userPhone = view.findViewById(R.id.edit_phone);
         userRankPoints = view.findViewById(R.id.edit_rank);
-
 
         // Inflate the layout for this fragment
         // Check if user is signed in (non-null) and update UI accordingly.
@@ -69,7 +69,5 @@ public class ProfileFragment extends Fragment {
 
         }
         return view;
-
     }
-
 }
