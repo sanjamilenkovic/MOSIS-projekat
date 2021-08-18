@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -14,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseUser;
-import com.squareup.picasso.Picasso;
+import com.google.firebase.database.DataSnapshot;
 
 import rs.elfak.mosis.trafficbuddy.R;
 import rs.elfak.mosis.trafficbuddy.data.Rating;
@@ -24,9 +23,12 @@ import rs.elfak.mosis.trafficbuddy.utils.Firebase;
 
 public class ReportDialog extends Dialog {
     public final Activity c;
-    private Report currentReport;
+    private final Report currentReport;
     public Dialog d;
+    private User currentUser;
     private Boolean liked = false;
+    private Rating currentRating = null;
+    TextView userReported;
 
     public ReportDialog(Activity a, Report r) {
         super(a);
@@ -63,23 +65,31 @@ public class ReportDialog extends Dialog {
         TextView lon = findViewById(R.id.edit_text_lon);
         lon.setText(currentReport.getLon() + "");
 
-        TextView userReported = findViewById(R.id.edit_reportedBy);
+        userReported = findViewById(R.id.edit_reportedBy);
 
         String reportedById = currentReport.getReportedById();
-        Firebase.getDbRef().child(Firebase.DB_USERS).child(reportedById).get().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Log.e("firebase", "Error getting data", task.getException());
-            } else {
-                User user = task.getResult().getValue(User.class);
-                if (user != null) {
-                    userReported.setText(user.getName());
+
+        getCurrentUser();
+        FirebaseUser loggedInUser = Firebase.getFirebaseAuth().getCurrentUser();
+        String currentUserId = loggedInUser.getUid();
+        ImageView thumbUp = findViewById(R.id.thumb_up);
+
+        Firebase.getDbRef().child("ratings").get().addOnSuccessListener(it -> {
+            for (DataSnapshot rat : it.getChildren()) {
+                Rating rating = rat.getValue(Rating.class);
+                if (rating.getRatedById().equals(currentUserId) && rating.getRatedReportId().equals(currentReport.getId())) {
+                    currentRating = rating;
+                    Toast.makeText(getContext(), rating.toString(), Toast.LENGTH_SHORT).show();
+                    liked = true;
+                    thumbUp.setColorFilter(c.getResources().getColor(R.color.light_green));
                 }
             }
-
+            ;
         });
 
-        ImageView thumbUp = findViewById(R.id.thumb_up);
+
         thumbUp.setOnClickListener(l -> {
+            getCurrentUser();
             liked = !liked;
             if (liked) {
                 thumbUp.setColorFilter(c.getResources().getColor(R.color.light_green));
@@ -89,18 +99,42 @@ public class ReportDialog extends Dialog {
                 newRating.addLike();
                 newRating.setRatedReportId(currentReport.getId());
 
-                FirebaseUser loggedInUser = Firebase.getFirebaseAuth().getCurrentUser();
-                String currentUserId = loggedInUser.getUid();
 
                 newRating.setRatedById(currentUserId);
                 String key = Firebase.getDbRef().push().getKey();
                 newRating.setId(key);
+                currentRating = newRating;
 
+                Firebase.getDbRef().child("ratings").child(key).setValue(newRating).addOnSuccessListener(it -> {
 
-                Firebase.getDbRef().child("ratings").child(key).setValue(newRating);
+                    Firebase.getDbRef().child("users").child(currentReport.getReportedById()).child("rankPoints").setValue(currentUser.getRankPoints() + 1);
+                });
 
-            } else
+            } else {
                 thumbUp.setColorFilter(c.getResources().getColor(R.color.white));
+                if (currentRating != null) {
+                    Firebase.getDbRef().child("ratings").child(currentRating.getId()).removeValue().addOnSuccessListener(it -> {
+
+                        Firebase.getDbRef().child("users").child(currentReport.getReportedById()).child("rankPoints").setValue(currentUser.getRankPoints() - 1);
+
+                    });
+                }
+            }
+        });
+    }
+
+    private void getCurrentUser() {
+        Firebase.getDbRef().child(Firebase.DB_USERS).child(currentReport.getReportedById()).get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting data", task.getException());
+            } else {
+                currentUser = task.getResult().getValue(User.class);
+
+                if (currentUser != null) {
+                    userReported.setText(currentUser.getName());
+                }
+            }
+
 
         });
     }

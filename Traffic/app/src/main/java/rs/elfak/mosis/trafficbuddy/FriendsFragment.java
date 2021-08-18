@@ -2,13 +2,11 @@ package rs.elfak.mosis.trafficbuddy;
 
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,10 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 
 import rs.elfak.mosis.trafficbuddy.adapters.FriendsAdapter;
-import rs.elfak.mosis.trafficbuddy.adapters.MyReportsAdapter;
 import rs.elfak.mosis.trafficbuddy.data.User;
-import rs.elfak.mosis.trafficbuddy.utils.Firebase;
-import rs.elfak.mosis.trafficbuddy.viewmodel.ReportsViewModel;
 
 
 public class FriendsFragment extends Fragment {
