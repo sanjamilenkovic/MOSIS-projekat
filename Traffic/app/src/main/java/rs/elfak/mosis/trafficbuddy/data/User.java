@@ -3,7 +3,7 @@ package rs.elfak.mosis.trafficbuddy.data;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+public class User implements Comparable<User> {
     private String uid;
     private String username;
     private String password; // password stored for testing purposes
@@ -147,6 +147,15 @@ public class User {
         else
             currentNum = friends.size();
         this.friends.add(currentNum, newFriend);
+    }
+
+    @Override
+    public int compareTo(User u) {
+        if(getRankPoints() < u.getRankPoints())
+            return 1;
+        else if (getRankPoints() > u.getRankPoints())
+            return -1;
+        else return 0;
     }
 }
 

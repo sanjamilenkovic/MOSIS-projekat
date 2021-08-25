@@ -12,6 +12,8 @@
     <string name="save">Save</string>
     <string name="rank">Rank</string>
     <string name="rank_points">Rank points</string>
+    <string name="rank_list">Rank list</string>
+
     <string name="description">Description</string>
     <string name="title">Title</string>
     <string name="lat">Lat</string>
