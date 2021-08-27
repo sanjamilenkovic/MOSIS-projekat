@@ -5,17 +5,20 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
@@ -30,22 +33,22 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationTokenSource;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.core.Repo;
+import com.google.firebase.database.DataSnapshot;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import rs.elfak.mosis.trafficbuddy.adapters.AddReportItemAdapter;
 import rs.elfak.mosis.trafficbuddy.data.Report;
 import rs.elfak.mosis.trafficbuddy.data.User;
 import rs.elfak.mosis.trafficbuddy.dialogs.AddReportDialog;
-import rs.elfak.mosis.trafficbuddy.dialogs.ReportDialog;
+import rs.elfak.mosis.trafficbuddy.dialogs.FilterDialog;
 import rs.elfak.mosis.trafficbuddy.utils.Firebase;
 import rs.elfak.mosis.trafficbuddy.viewmodel.ReportsViewModel;
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements FilterDialog.FilterClickListener {
 
     private GoogleMap googleMap;
     private Boolean flag = true;
@@ -101,44 +104,47 @@ public class MapFragment extends Fragment {
         } else {
             viewModel.getReports().observe(getViewLifecycleOwner(), reports -> {
                 if (allReportsAreSelected) {
-                    googleMapMarkers = new ArrayList<>();
-                    markerTargets = new ArrayList<>();
-                    googleMap.clear();
+                    prikaziReporte(reports);
 
-                    for (int i = 0; i < reports.size(); i++) {
-                        Report d = reports.get(i);
-                        markerTargets.add(new Target() {
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                MarkerOptions marker = new MarkerOptions();
-                                marker.position(new LatLng(d.getLat(), d.getLon()));
-                                marker.title(d.getTitle());
-
-                                marker.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
-                                marker.snippet(d.getId());
-
-                                googleMapMarkers.add(marker);
-                                googleMap.addMarker(marker);
-                                googleMap.setOnInfoWindowClickListener(reportClickListener);
-                            }
-
-                            @Override
-                            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                            }
-
-                            @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                            }
-                        });
-
-                        Resources resources = getContext().getResources();
-                        final int resourceId = resources.getIdentifier(reports.get(i).getIconTitle(), "drawable",
-                                getContext().getPackageName());
-
-                        Picasso.get().load(resourceId).resize(50, 50).into(markerTargets.get(i));
-
-
-                    }
+//                    googleMapMarkers = new ArrayList<>();
+//                    markerTargets = new ArrayList<>();
+//                    googleMap.clear();
+//
+//                    for (int i = 0; i < reports.size(); i++) {
+//                        Report d = reports.get(i);
+//                        markerTargets.add(new Target() {
+//                            @Override
+//                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                                MarkerOptions marker = new MarkerOptions();
+//                                marker.position(new LatLng(d.getLat(), d.getLon()));
+//                                marker.title(d.getTitle());
+//
+//                                marker.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+//                                marker.snippet(d.getId());
+//
+//                                googleMapMarkers.add(marker);
+//                                googleMap.addMarker(marker);
+//                                googleMap.setOnInfoWindowClickListener(reportClickListener);
+//                            }
+//
+//                            @Override
+//                            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+//                            }
+//
+//                            @Override
+//                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+//                            }
+//                        });
+//
+//                        Resources resources = getContext().getResources();
+//                        final int resourceId = resources.getIdentifier(reports.get(i).getIconTitle(), "drawable",
+//                                getContext().getPackageName());
+//
+//                        Picasso.get().load(resourceId).resize(50, 50).into(markerTargets.get(i));
+//
+//
+//                    }
+//                }
                 }
             });
         }
@@ -150,7 +156,49 @@ public class MapFragment extends Fragment {
     final GoogleMap.OnInfoWindowClickListener userClickListener = marker -> {
     };
 
+    public void prikaziReporte(List<Report> reports) {
+        googleMapMarkers = new ArrayList<>();
+        markerTargets = new ArrayList<>();
+        googleMap.clear();
 
+        for (int i = 0; i < reports.size(); i++) {
+            Report d = reports.get(i);
+            markerTargets.add(new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    MarkerOptions marker = new MarkerOptions();
+                    marker.position(new LatLng(d.getLat(), d.getLon()));
+                    marker.title(d.getTitle());
+
+                    marker.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                    marker.snippet(d.getId());
+
+                    googleMapMarkers.add(marker);
+                    googleMap.addMarker(marker);
+                    googleMap.setOnInfoWindowClickListener(reportClickListener);
+                }
+
+                @Override
+                public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                }
+            });
+
+            Resources resources = getContext().getResources();
+            final int resourceId = resources.getIdentifier(reports.get(i).getIconTitle(), "drawable",
+                    getContext().getPackageName());
+
+            Picasso.get().load(resourceId).resize(50, 50).into(markerTargets.get(i));
+
+
+        }
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -161,7 +209,14 @@ public class MapFragment extends Fragment {
         mMapViewFullScreen.onCreate(savedInstanceState);
         mMapViewFullScreen.onResume(); // needed to get the map to display immediately
         cancellationTokenSource = new CancellationTokenSource();
+
         FloatingActionButton addNewReport = view.findViewById(R.id.fab_add_report);
+        FloatingActionButton filterDate = view.findViewById(R.id.fab_filter_date);
+        filterDate.setOnClickListener(l -> {
+            FilterDialog fd = new FilterDialog(getActivity());
+            fd.setFilterClickListener(this);
+            fd.show();
+        });
 
         changeView.setOnClickListener(p -> {
             flag = !flag;
@@ -185,6 +240,7 @@ public class MapFragment extends Fragment {
                             addReportB.putParcelable("currentLocation", currentLatLng);
 
                             AddReportDialog ard = new AddReportDialog(getActivity(), addReportB);
+
                             ard.show();
 
                         });
@@ -217,7 +273,27 @@ public class MapFragment extends Fragment {
         return view;
     }
 
-    ;
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void prikaziFiltriraneReportove(String title, String date) {
+
+        Firebase.getDbRef().child(Firebase.DB_REPORTS).get().addOnSuccessListener(snapshot -> {
+            ArrayList<Report> all = new ArrayList<>();
+            for (DataSnapshot child : snapshot.getChildren()) {
+                Report report = child.getValue(Report.class);
+                all.add(report);
+            }
+
+            //ovde puca!!
+            if (title != null)
+                for (Report report : all) {
+                        all.removeIf(r -> r.getIconTitle() != title);
+                }
+
+            prikaziReporte(all);
+
+        });
+
+    }
 
     public GoogleMap getGoogleMapFriends() {
         return googleMap;
@@ -234,5 +310,12 @@ public class MapFragment extends Fragment {
                             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                         }
                     });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onIconClick(String title, String date) {
+        Toast.makeText(getContext(), "vraceno " + title + " " + date, Toast.LENGTH_SHORT).show();
+        //prikaziFiltriraneReportove(title, date);
     }
 }

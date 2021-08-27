@@ -2,6 +2,7 @@ package rs.elfak.mosis.trafficbuddy;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +15,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import rs.elfak.mosis.trafficbuddy.adapters.FriendsAdapter;
 import rs.elfak.mosis.trafficbuddy.data.User;
+import rs.elfak.mosis.trafficbuddy.utils.Firebase;
 
 
 public class FriendsFragment extends Fragment {
@@ -46,18 +50,31 @@ public class FriendsFragment extends Fragment {
 
         bluetoothSettings = view.findViewById(R.id.blutut);
 
+
+
         bluetoothSettings.setOnClickListener(l -> {
             BluetoothFragment nextFrag = new BluetoothFragment();
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.map_host_fragment, nextFrag, "bluetooth")
                     .addToBackStack(null)
                     .commit();
+
+
         });
 
 
+
+
         //priprema za recyclerView
+
+//        adapter = new FriendsAdapter(getContext());
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//        recyclerView = view.findViewById(R.id.rv_friends);
+//        recyclerView.setAdapter(adapter);
+//
 //        FirebaseUser loggedInUser = Firebase.getFirebaseAuth().getCurrentUser();
 //        if (loggedInUser != null) {
+//            final Integer[] currentNum = {0};
 //            String uid = loggedInUser.getUid();
 //
 //            Firebase.getDbRef().child(Firebase.DB_USERS).child(uid).get().addOnCompleteListener(task -> {
@@ -66,39 +83,27 @@ public class FriendsFragment extends Fragment {
 //                        } else {
 //                            user = task.getResult().getValue(User.class);
 //                            if (user != null) {
-//                                this.myFriends = user.getFriends();
+//                                this.myFriends = user.getFriends(); //lista stringova
 //                                myFriendsUser = new ArrayList<User>(1);
-//                                Integer currentNum;
-//                                if (myFriends.size() == 0)
-//                                    currentNum = 0;
-//                                else
-//                                    currentNum = myFriends.size();
 //
 //                                for (String friend : myFriends) {
 //                                    Firebase.getDbRef().child(Firebase.DB_USERS).child(friend).get().addOnCompleteListener(t -> {
-////                                            this.friends.add(currentNum, newFriend);
+//
 //                                        User user = t.getResult().getValue(User.class);
-//                                        myFriendsUser.add(currentNum, user);
+//                                        myFriendsUser.add(currentNum[0], user);
+//                                        currentNum[0]++;
 //                                    });
 //                                }
 //
-//                                setupRV(myFriendsUser);
+//                                adapter.notifyDataSetChanged();
 //
 //                            }
 //                        }
 //                    }
 //            );
 //        }
-//
-//        recyclerView = view.findViewById(R.id.rv_friends);
 
         return view;
     }
 
-    public void setupRV(ArrayList<User> myFriendsUser) {
-        adapter = new FriendsAdapter(getContext(), this.myFriendsUser);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(adapter);
-
-    }
 }

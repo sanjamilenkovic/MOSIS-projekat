@@ -18,6 +18,7 @@ import rs.elfak.mosis.trafficbuddy.utils.Firebase;
 public class ReportsViewModel extends ViewModel {
 
     final MutableLiveData<List<Report>> reports = new MutableLiveData<List<Report>>();
+    final MutableLiveData<List<Report>> filteredReports = new MutableLiveData<List<Report>>();
     final MutableLiveData<List<User>> allUsers = new MutableLiveData<>();
     private final DatabaseReference reportDbRef;
 
@@ -30,6 +31,13 @@ public class ReportsViewModel extends ViewModel {
             reportDbRef.child(Firebase.DB_REPORTS).addValueEventListener(reportValueListener);
         }
         return reports;
+    }
+
+    public LiveData<List<Report>> getFilteredReports(String filter) {
+        if (filteredReports.getValue() == null) {
+
+        }
+        return filteredReports;
     }
 
     public LiveData<List<User>> getAllUsers() {

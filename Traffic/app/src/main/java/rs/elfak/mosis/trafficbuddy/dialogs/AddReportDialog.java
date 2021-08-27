@@ -16,6 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import rs.elfak.mosis.trafficbuddy.R;
 import rs.elfak.mosis.trafficbuddy.adapters.AddReportItemAdapter;
 import rs.elfak.mosis.trafficbuddy.data.Report;
@@ -81,6 +86,16 @@ public class AddReportDialog extends Dialog implements AddReportItemAdapter.Icon
                         Toast.makeText(c, "Error", Toast.LENGTH_SHORT).show();
                         btn.setEnabled(true);
                     } else {
+
+//                        SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'");
+//
+//                        String now = ISO_8601_FORMAT.format(new Date());
+
+                        String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+                        String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+
+                        newReport.setDate(currentDate);
+                        newReport.setTime(currentTime);
                         newReport.setDescription(String.valueOf(editDescription.getText()));
                         newReport.setTitle(String.valueOf(editDescription.getText()));
                         newReport.setLat(latLng.latitude);

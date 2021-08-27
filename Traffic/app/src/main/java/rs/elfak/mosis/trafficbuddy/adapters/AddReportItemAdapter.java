@@ -92,9 +92,6 @@ public class AddReportItemAdapter extends RecyclerView.Adapter<AddReportItemAdap
         } else
             holder.myImageView.setAlpha((float) 1.0);
 
-        //ako pamtim po id-ju
-//        holder.myImageView.setImageResource(list.get(position));
-//        holder.myImageView.setTag(position);
 
 
         Resources resources = c.getResources();

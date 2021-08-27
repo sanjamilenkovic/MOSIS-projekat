@@ -82,8 +82,8 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         emailEditText.addTextChangedListener(signUpTextWatcher);
         passwordEditText.addTextChangedListener(signUpTextWatcher);
 
-        emailEditText.setText("petar@mail.com");
-        passwordEditText.setText("petar123");
+        emailEditText.setText("sanja@mail.com");
+        passwordEditText.setText("sanja123");
         signInButton.setOnClickListener(signInButtonOnClickListener);
     }
 

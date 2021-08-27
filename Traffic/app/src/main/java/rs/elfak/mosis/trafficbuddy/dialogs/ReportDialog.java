@@ -65,6 +65,18 @@ public class ReportDialog extends Dialog {
         TextView lon = findViewById(R.id.edit_text_lon);
         lon.setText(currentReport.getLon() + "");
 
+        TextView date_time = findViewById(R.id.edit_added_date_time);
+        if(currentReport.getDate() != null)
+            date_time.setText(currentReport.getDate());
+        else
+            date_time.setText("24-04-99");
+
+        if(currentReport.getTime() != null)
+            date_time.append(" " + currentReport.getTime());
+        else
+            date_time.append(" 15:30");
+
+
         userReported = findViewById(R.id.edit_reportedBy);
 
         String reportedById = currentReport.getReportedById();

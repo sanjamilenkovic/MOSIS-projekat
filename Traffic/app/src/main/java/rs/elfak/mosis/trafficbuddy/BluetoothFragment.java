@@ -405,4 +405,9 @@ public class BluetoothFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Toast.makeText(getContext(), "sad", Toast.LENGTH_SHORT).show();
+    }
 }

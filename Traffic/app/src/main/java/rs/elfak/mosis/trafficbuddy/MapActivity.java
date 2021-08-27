@@ -30,6 +30,7 @@ public class MapActivity extends AppCompatActivity {
 
     public void setUpNavigation() {
         bottomNavigationView = findViewById(R.id.bttm_nav);
+
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_host_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView,

@@ -1,5 +1,7 @@
 package rs.elfak.mosis.trafficbuddy.data;
 
+import java.util.Date;
+
 public class Report {
 
     private String id;
@@ -10,6 +12,8 @@ public class Report {
     private String reportedById;
     private Integer icon;
     private String iconTitle;
+    private String date;
+    private String time;
 
     public String getId() {
         return id;
@@ -65,5 +69,21 @@ public class Report {
 
     public void setReportedById(String idr) {
         this.reportedById = idr;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String d) {
+        this.date = d;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String d) {
+        this.time = d;
     }
 }

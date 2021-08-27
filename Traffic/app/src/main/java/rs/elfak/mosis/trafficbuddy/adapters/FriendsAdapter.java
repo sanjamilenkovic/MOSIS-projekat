@@ -21,12 +21,11 @@ import rs.elfak.mosis.trafficbuddy.data.User;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.Holder> {
 
-    private ArrayList<User> myFriends;
+    private ArrayList<User> myFriends = new ArrayList<>(0);
     private final LayoutInflater mInflater;
 
 
-    public FriendsAdapter(Context context, ArrayList<User> my) {
-        this.myFriends = my;
+    public FriendsAdapter(Context context) {
         this.mInflater = LayoutInflater.from(context);
 
     }

@@ -165,7 +165,7 @@ public class RealTimeLocationService extends Service {
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        startLocationUpdates();
+        //startLocationUpdates();
         return START_STICKY;
     }
 

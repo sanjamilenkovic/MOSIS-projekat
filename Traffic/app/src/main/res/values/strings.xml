@@ -24,5 +24,6 @@
     <string name="report_details">Report details</string>
     <string name="traffic_notification_channel_name">Traffic notification channel</string>
     <string name="traffic_notification_channel_description">Channel for notifications related to location</string>
+    <string name="date_time_added">Date/time added</string>
 
 </resources>
