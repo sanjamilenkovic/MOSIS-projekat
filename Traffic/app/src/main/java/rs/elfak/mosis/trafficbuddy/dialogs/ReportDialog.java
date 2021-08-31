@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 
@@ -43,6 +44,8 @@ public class ReportDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_current_report);
 
+        getCurrentUser();
+
         TextView title = findViewById(R.id.reportDetailsTitle);
         title.setText(currentReport.getTitle());
 
@@ -58,6 +61,10 @@ public class ReportDialog extends Dialog {
         Drawable d = resources.getDrawable(resourceId);
         image.setImageDrawable(d);
 
+
+//        FloatingActionButton deleteMyReport = findViewById(R.id.deleteReport);
+//        if(currentReport.getReportedById().equals(currentUser.getUid()))
+//            deleteMyReport.show();
 
         TextView lat = findViewById(R.id.edit_text_lat);
         lat.setText(currentReport.getLat() + "");
@@ -79,9 +86,7 @@ public class ReportDialog extends Dialog {
 
         userReported = findViewById(R.id.edit_reportedBy);
 
-        String reportedById = currentReport.getReportedById();
 
-        getCurrentUser();
         FirebaseUser loggedInUser = Firebase.getFirebaseAuth().getCurrentUser();
         String currentUserId = loggedInUser.getUid();
         ImageView thumbUp = findViewById(R.id.thumb_up);

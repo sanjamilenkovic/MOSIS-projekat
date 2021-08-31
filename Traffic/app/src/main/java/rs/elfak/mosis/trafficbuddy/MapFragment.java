@@ -1,6 +1,8 @@
 package rs.elfak.mosis.trafficbuddy;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -17,8 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
@@ -34,17 +34,21 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationTokenSource;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.core.Repo;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import rs.elfak.mosis.trafficbuddy.adapters.AddReportItemAdapter;
 import rs.elfak.mosis.trafficbuddy.data.Report;
 import rs.elfak.mosis.trafficbuddy.data.User;
 import rs.elfak.mosis.trafficbuddy.dialogs.AddReportDialog;
 import rs.elfak.mosis.trafficbuddy.dialogs.FilterDialog;
+import rs.elfak.mosis.trafficbuddy.dialogs.FriendDialog;
+import rs.elfak.mosis.trafficbuddy.dialogs.ReportDialog;
 import rs.elfak.mosis.trafficbuddy.utils.Firebase;
 import rs.elfak.mosis.trafficbuddy.viewmodel.ReportsViewModel;
 
@@ -80,6 +84,7 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
                                 marker.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
                                 marker.snippet(u.getUid());
 
+
                                 googleMapMarkers.add(marker);
                                 googleMap.addMarker(marker);
                                 googleMap.setOnInfoWindowClickListener(userClickListener);
@@ -104,7 +109,7 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
         } else {
             viewModel.getReports().observe(getViewLifecycleOwner(), reports -> {
                 if (allReportsAreSelected) {
-                    prikaziReporte(reports);
+                    showAllReports(reports);
 
 //                    googleMapMarkers = new ArrayList<>();
 //                    markerTargets = new ArrayList<>();
@@ -151,12 +156,33 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
     }
 
     final GoogleMap.OnInfoWindowClickListener reportClickListener = marker -> {
+
+        Toast.makeText(getContext(), "Report Selected", Toast.LENGTH_SHORT).show();
+
+        String idReport = marker.getSnippet();
+        Toast.makeText(getContext(), idReport, Toast.LENGTH_SHORT).show();
+
+        Firebase.getDbRef().child(Firebase.DB_REPORTS).child(idReport).get().addOnSuccessListener(snapshot -> {
+            Report report = snapshot.getValue(Report.class);
+            ReportDialog rd = new ReportDialog((Activity) getContext(), report);
+            rd.show();
+        });
     };
 
     final GoogleMap.OnInfoWindowClickListener userClickListener = marker -> {
+        Toast.makeText(getContext(), "User selected", Toast.LENGTH_SHORT).show();
+
+        String idFriend = marker.getSnippet();
+        Toast.makeText(getContext(), idFriend, Toast.LENGTH_SHORT).show();
+
+        Firebase.getDbRef().child(Firebase.DB_USERS).child(idFriend).get().addOnSuccessListener(snapshot -> {
+            User friend = snapshot.getValue(User.class);
+            FriendDialog fd = new FriendDialog((Activity) getContext(), friend);
+            fd.show();
+        });
     };
 
-    public void prikaziReporte(List<Report> reports) {
+    public void showAllReports(List<Report> reports) {
         googleMapMarkers = new ArrayList<>();
         markerTargets = new ArrayList<>();
         googleMap.clear();
@@ -223,9 +249,12 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
             if (flag) {
                 allReportsAreSelected = false;
                 allUsersAreSelected = true;
+                changeView.setText("VIEW REPORTS");
             } else {
                 allReportsAreSelected = true;
                 allUsersAreSelected = false;
+                changeView.setText("VIEW USERS");
+
             }
             onResume();
         });
@@ -274,7 +303,7 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void prikaziFiltriraneReportove(String title, String date) {
+    private void prikaziFiltriraneReportove(String title, String startDate) {
 
         Firebase.getDbRef().child(Firebase.DB_REPORTS).get().addOnSuccessListener(snapshot -> {
             ArrayList<Report> all = new ArrayList<>();
@@ -283,17 +312,35 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
                 all.add(report);
             }
 
-            //ovde puca!!
+            ArrayList<Report> filteredReports = new ArrayList<Report>();
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
             if (title != null)
                 for (Report report : all) {
-                        all.removeIf(r -> r.getIconTitle() != title);
+                    String iconTitle = report.getIconTitle();
+                    String dateAdded = report.getDate();
+                    if (startDate != null) {
+                        try {
+                            if (iconTitle.equals(title) && (sdf.parse(startDate).before(sdf.parse(dateAdded)))) {
+                                filteredReports.add(report);
+                                //Toast.makeText(getContext(), report.getTitle() , Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
 
-            prikaziReporte(all);
-
+            if (filteredReports.size() > 0)
+                showAllReports(filteredReports);
+            else {
+                Toast.makeText(getContext(), "Nema reportova koji zadovoljavaju prosledjene filtere!", Toast.LENGTH_LONG).show();
+                showAllReports(all);
+            }
         });
 
     }
+
 
     public GoogleMap getGoogleMapFriends() {
         return googleMap;
@@ -316,6 +363,6 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
     @Override
     public void onIconClick(String title, String date) {
         Toast.makeText(getContext(), "vraceno " + title + " " + date, Toast.LENGTH_SHORT).show();
-        //prikaziFiltriraneReportove(title, date);
+        prikaziFiltriraneReportove(title, date);
     }
 }

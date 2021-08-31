@@ -3,9 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-
     android:layout_height="match_parent"
-    tools:context=".SignUp">
+    tools:context=".SignUpFragment">
 
     <ImageView
         android:id="@+id/imageView"
@@ -21,26 +20,24 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/image_edit"
         android:fontFamily="casual"
         android:text="@string/sign_up"
-        android:textSize="35sp"
+        android:textSize="@dimen/header_dim"
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:elevation="2dp"
         />
 
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image_edit"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:clickable="true"
         android:src="@drawable/ic_baseline_account_circle_24"
-        app:layout_constraintBottom_toTopOf="@+id/name_bck"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline_15"
+        app:layout_constraintTop_toBottomOf="@id/logo"
         android:focusable="true" />
 
 
@@ -49,11 +46,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0.75"
+        android:layout_marginTop="10dp"
         android:clickable="false"
         android:background="@drawable/background_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline" />
+        app:layout_constraintTop_toBottomOf="@id/image_edit"/>
 
     <ImageView
         android:id="@+id/account_icon"
@@ -135,7 +133,7 @@
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_username_24"
+        android:src="@drawable/ic_baseline_alternate_email_24"
         app:layout_constraintStart_toStartOf="@id/email_bck"
         app:layout_constraintTop_toTopOf="@id/email_bck"
         android:elevation="2dp"
@@ -194,7 +192,7 @@
         app:layout_constraintTop_toTopOf="@id/password_bck" />
 
     <Button
-        android:id="@+id/phone_bck"
+        android:id="@+id/username_bck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0.75"
@@ -204,6 +202,43 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/password_bck" />
+
+    <ImageView
+        android:padding="10dp"
+        android:id="@+id/username_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_username_24"
+        app:layout_constraintStart_toStartOf="@id/username_bck"
+        app:layout_constraintTop_toTopOf="@id/username_bck"
+        android:elevation="2dp"
+        app:layout_constraintBottom_toBottomOf="@id/username_bck"/>
+
+    <EditText
+        android:id="@+id/edit_username"
+        android:textColor="@color/white"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:hint="@string/username"
+        android:textSize="15sp"
+        android:elevation="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/username_bck"
+        app:layout_constraintEnd_toEndOf="@+id/username_bck"
+        app:layout_constraintStart_toEndOf="@+id/username_icon"
+        app:layout_constraintTop_toTopOf="@id/username_bck" />
+
+    <Button
+        android:id="@+id/phone_bck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.75"
+        android:clickable="false"
+        android:background="@drawable/background_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/username_bck" />
 
     <ImageView
         android:padding="10dp"
@@ -244,26 +279,19 @@
         app:layout_constraintTop_toBottomOf="@+id/phone_bck"
         app:layout_goneMarginTop="20dp" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.12" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.30" />
+<!--    <androidx.constraintlayout.widget.Guideline-->
+<!--        android:id="@+id/guideline"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintGuide_percent="0.30" />-->
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_80"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.80" />
+        app:layout_constraintGuide_percent="0.85" />
 
     <ImageButton
         android:id="@+id/image_button"

@@ -26,8 +26,8 @@ import rs.elfak.mosis.trafficbuddy.data.Report;
 import rs.elfak.mosis.trafficbuddy.dialogs.ReportDialog;
 import rs.elfak.mosis.trafficbuddy.viewmodel.ReportsViewModel;
 
-
-public class ReportsFragment extends Fragment implements MyReportsAdapter.ReportClickListener {
+//implements MyReportsAdapter.ReportClickListener
+public class ReportsFragment extends Fragment  {
 
     private RecyclerView recyclerView;
     private MyReportsAdapter adapter;
@@ -77,10 +77,10 @@ public class ReportsFragment extends Fragment implements MyReportsAdapter.Report
         }
     };
 
-    @Override
-    public void onReportClick() {
-        Toast.makeText(getContext(), "nesto", Toast.LENGTH_SHORT).show();
-    }
+//    @Override
+//    public void onReportClick() {
+//        Toast.makeText(getContext(), "nesto", Toast.LENGTH_SHORT).show();
+//    }
 
 
 }

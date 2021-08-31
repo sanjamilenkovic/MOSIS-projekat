@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/start_dest"
-        android:name="rs.elfak.mosis.trafficbuddy.StartFragment"
+        android:name="rs.elfak.mosis.trafficbuddy.SignInFragment"
         android:label="fragment_start"
-        tools:layout="@layout/fragment_start" >
+        tools:layout="@layout/fragment_sign_in" >
         <action
             android:id="@+id/action_start_dest_to_signUp_dest"
             app:destination="@id/signUp_dest" />
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/signUp_dest"
-        android:name="rs.elfak.mosis.trafficbuddy.SignUp"
+        android:name="rs.elfak.mosis.trafficbuddy.SignUpFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_sign_up" />
 

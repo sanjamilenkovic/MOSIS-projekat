@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,21 +30,20 @@ public class MyReportsAdapter extends RecyclerView.Adapter<MyReportsAdapter.Imag
     private final List<Report> list = new ArrayList<>();
     private List<Report> myReports;
     private final List<Report> allReports = new ArrayList<>();
-    private MyReportsAdapter.ReportClickListener reportClickListener;
+//    private MyReportsAdapter.ReportClickListener reportClickListener;
 
     // data is passed into the constructor
     public MyReportsAdapter(Context context, List<Report> rs, List<Report> my) {
         this.c = context;
         this.mInflater = LayoutInflater.from(context);
-
         myReports = my;
         list.addAll(rs);
         allReports.addAll(rs);
     }
 
-    public void setReportClickListener(ReportClickListener i) {
-        reportClickListener = i;
-    }
+//    public void setReportClickListener(ReportClickListener i) {
+//        reportClickListener = i;
+//    }
 
 
     // stores and recycles views as they are scrolled off screen
@@ -55,7 +56,6 @@ public class MyReportsAdapter extends RecyclerView.Adapter<MyReportsAdapter.Imag
             super(itemView);
             myReportImageView = itemView.findViewById(R.id.image_report);
             myReportTextView = itemView.findViewById(R.id.report_name);
-
             itemView.setOnClickListener(this::onClick);
         }
 
@@ -125,7 +125,7 @@ public class MyReportsAdapter extends RecyclerView.Adapter<MyReportsAdapter.Imag
     }
 
     // parent activity will implement this method to respond to click events
-    public interface ReportClickListener {
-        void onReportClick();
-    }
+//    public interface ReportClickListener {
+//        void onReportClick();
+//    }
 }

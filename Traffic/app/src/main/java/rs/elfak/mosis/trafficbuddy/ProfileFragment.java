@@ -30,6 +30,7 @@ public class ProfileFragment extends Fragment {
     EditText userMail;
     EditText userRankPoints;
     EditText userPhone;
+    private EditText userUsername;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,6 +44,7 @@ public class ProfileFragment extends Fragment {
         userMail = view.findViewById(R.id.edit_mail);
         userPhone = view.findViewById(R.id.edit_phone);
         userRankPoints = view.findViewById(R.id.edit_rank);
+        userUsername = view.findViewById(R.id.edit_username);
 
         // Inflate the layout for this fragment
         // Check if user is signed in (non-null) and update UI accordingly.
@@ -62,6 +64,7 @@ public class ProfileFragment extends Fragment {
                         userMail.setText(user.getEmail());
                         userRankPoints.setText(String.valueOf(user.getRankPoints()));
                         userPhone.setText(user.getPhoneNumber());
+                        userUsername.setText(user.getUsername());
 
                     }
                 }

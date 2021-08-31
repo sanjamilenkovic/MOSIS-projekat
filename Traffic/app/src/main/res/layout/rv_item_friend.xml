@@ -14,9 +14,10 @@
         android:src="@drawable/blank_bg"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_marginTop="10dp"
         android:id="@+id/profilePicture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_margin="20sp"
         android:src="@drawable/sudar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,6 +28,7 @@
 
     <TextView
         android:id="@+id/imePrezime"
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sanja Milenkovic"

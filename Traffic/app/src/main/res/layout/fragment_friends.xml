@@ -37,16 +37,14 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_friends"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
         android:orientation="horizontal"
         app:layout_constrainedHeight="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logo"
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/rv_item_friend" />
-
-
 
 
     <androidx.constraintlayout.widget.Guideline

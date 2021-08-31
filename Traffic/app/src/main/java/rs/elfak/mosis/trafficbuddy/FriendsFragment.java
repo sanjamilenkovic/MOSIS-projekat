@@ -15,8 +15,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import rs.elfak.mosis.trafficbuddy.adapters.FriendsAdapter;
 import rs.elfak.mosis.trafficbuddy.data.User;
@@ -30,7 +28,7 @@ public class FriendsFragment extends Fragment {
     private FriendsAdapter adapter;
     private User user;
     private ArrayList<String> myFriends;
-    private ArrayList<User> myFriendsUser;
+    private ArrayList<User> myFriendsUseri;
 
     private String uid;
     private FloatingActionButton bluetoothSettings;
@@ -50,8 +48,6 @@ public class FriendsFragment extends Fragment {
 
         bluetoothSettings = view.findViewById(R.id.blutut);
 
-
-
         bluetoothSettings.setOnClickListener(l -> {
             BluetoothFragment nextFrag = new BluetoothFragment();
             getActivity().getSupportFragmentManager().beginTransaction()
@@ -63,45 +59,39 @@ public class FriendsFragment extends Fragment {
         });
 
 
-
-
         //priprema za recyclerView
+        adapter = new FriendsAdapter(getContext());
+        recyclerView = view.findViewById(R.id.rv_friends);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setAdapter(adapter);
 
-//        adapter = new FriendsAdapter(getContext());
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//        recyclerView = view.findViewById(R.id.rv_friends);
-//        recyclerView.setAdapter(adapter);
-//
-//        FirebaseUser loggedInUser = Firebase.getFirebaseAuth().getCurrentUser();
-//        if (loggedInUser != null) {
-//            final Integer[] currentNum = {0};
-//            String uid = loggedInUser.getUid();
-//
-//            Firebase.getDbRef().child(Firebase.DB_USERS).child(uid).get().addOnCompleteListener(task -> {
-//                        if (!task.isSuccessful()) {
-//                            Log.e("firebase", "Error getting data", task.getException());
-//                        } else {
-//                            user = task.getResult().getValue(User.class);
-//                            if (user != null) {
-//                                this.myFriends = user.getFriends(); //lista stringova
-//                                myFriendsUser = new ArrayList<User>(1);
-//
-//                                for (String friend : myFriends) {
-//                                    Firebase.getDbRef().child(Firebase.DB_USERS).child(friend).get().addOnCompleteListener(t -> {
-//
-//                                        User user = t.getResult().getValue(User.class);
-//                                        myFriendsUser.add(currentNum[0], user);
-//                                        currentNum[0]++;
-//                                    });
-//                                }
-//
-//                                adapter.notifyDataSetChanged();
-//
-//                            }
-//                        }
-//                    }
-//            );
-//        }
+        FirebaseUser loggedInUser = Firebase.getFirebaseAuth().getCurrentUser();
+        if (loggedInUser != null) {
+            String uid = loggedInUser.getUid();
+            myFriendsUseri = new ArrayList<User>();
+            Firebase.getDbRef().child(Firebase.DB_USERS).child(uid).get().addOnCompleteListener(task -> {
+                        if (!task.isSuccessful()) {
+                            Log.e("firebase", "Error getting data", task.getException());
+                        } else {
+                            user = task.getResult().getValue(User.class);
+                            if (user != null) {
+                                this.myFriends = user.getFriends(); //lista stringova
+
+                                for (String friendID : myFriends) {
+                                    Firebase.getDbRef().child(Firebase.DB_USERS).child(friendID).get().addOnCompleteListener(t -> {
+
+                                        User user = t.getResult().getValue(User.class);
+                                        myFriendsUseri.add(user);
+                                        adapter.setMyFriendsList(myFriendsUseri);
+
+                                    });
+                                }
+
+                            }
+                        }
+                    }
+            );
+        }
 
         return view;
     }

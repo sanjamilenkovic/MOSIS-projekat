@@ -53,7 +53,7 @@ public class AddReportItemAdapter extends RecyclerView.Adapter<AddReportItemAdap
 
             myImageView.setOnClickListener(im -> {
                 String nazivDrawable = (String) myImageView.getTag();
-                for (int i=0; i<5; i++)
+                for (int i=0; i<6; i++)
                 {
                     if (nazivDrawable.equals(listaImena.get(i)))
                     {
