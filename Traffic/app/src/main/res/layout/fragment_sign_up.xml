@@ -185,6 +185,7 @@
         android:background="@android:color/transparent"
         android:hint="Password"
         android:textSize="15dp"
+        android:inputType="textPassword"
         android:elevation="2dp"
         app:layout_constraintBottom_toBottomOf="@+id/password_bck"
         app:layout_constraintEnd_toEndOf="@+id/password_bck"

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -25,12 +27,12 @@ public class FriendDialog extends Dialog {
     public final Activity c;
     private User currentFriend;
     CircleImageView userPhoto;
-    EditText userName;
-    EditText userLastName;
     EditText userMail;
     EditText userRankPoints;
     EditText userPhone;
-    private EditText userUsername;
+    private TextView nameLastname;
+    private TextView usernameNew;
+    private FloatingActionButton fabShowReports;
 
 
     public FriendDialog(Activity a, User f) {
@@ -47,21 +49,19 @@ public class FriendDialog extends Dialog {
         setContentView(R.layout.dialog_friend);
 
 
+        nameLastname = findViewById(R.id.logo);
+        usernameNew = findViewById(R.id.username);
         userPhoto = findViewById(R.id.image_edit);
-        userName = findViewById(R.id.edit_name);
-        userLastName = findViewById(R.id.edit_last_name);
         userMail = findViewById(R.id.edit_mail);
         userPhone = findViewById(R.id.edit_phone);
         userRankPoints = findViewById(R.id.edit_rank);
-        userUsername = findViewById(R.id.edit_username);
 
         Picasso.get().load(currentFriend.getImageUrl()).into(userPhoto);
-        userName.setText(currentFriend.getName());
-        userLastName.setText(currentFriend.getLastName());
+        nameLastname.setText(currentFriend.getName() + " " + currentFriend.getLastName());
+        usernameNew.setText("@" + currentFriend.getUsername());
         userMail.setText(currentFriend.getEmail());
         userRankPoints.setText(String.valueOf(currentFriend.getRankPoints()));
         userPhone.setText(currentFriend.getPhoneNumber());
-        userUsername.setText(currentFriend.getUsername());
 
     }
 }

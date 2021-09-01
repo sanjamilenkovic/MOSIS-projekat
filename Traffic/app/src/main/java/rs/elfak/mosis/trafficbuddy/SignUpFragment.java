@@ -148,7 +148,7 @@ public class SignUpFragment extends Fragment {
             });
 
     private final View.OnClickListener imageButtonOnClickListener = v -> {
-        //dodati permisiju...
+        //dodati permisiju
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
         mGetContent.launch(intent);
     };

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,7 +32,8 @@ public class FriendsFragment extends Fragment {
     private ArrayList<User> myFriendsUseri;
 
     private String uid;
-    private FloatingActionButton bluetoothSettings;
+    //private FloatingActionButton bluetoothSettings;
+    private Button connectBluetooth;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,16 +48,14 @@ public class FriendsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
 
-        bluetoothSettings = view.findViewById(R.id.blutut);
-
-        bluetoothSettings.setOnClickListener(l -> {
+        //bluetoothSettings = view.findViewById(R.id.blutut);
+        connectBluetooth = view.findViewById(R.id.connectBluetooth);
+        connectBluetooth.setOnClickListener(l -> {
             BluetoothFragment nextFrag = new BluetoothFragment();
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.map_host_fragment, nextFrag, "bluetooth")
                     .addToBackStack(null)
                     .commit();
-
-
         });
 
 

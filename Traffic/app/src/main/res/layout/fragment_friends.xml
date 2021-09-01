@@ -33,6 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -47,6 +48,33 @@
         app:layout_constraintBottom_toTopOf="@id/guideline_bottom"
         tools:listitem="@layout/rv_item_friend" />
 
+    <TextView
+        android:id="@+id/dont_have_account"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:alpha="0.75"
+        android:textColor="@color/white"
+        android:text="Wanna make more traffic buddies?"
+        android:clickable="false"
+        android:background="@drawable/background_button"
+        android:textSize="16dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_bottom"
+        android:gravity="center" />
+
+    <Button
+        android:id="@+id/connectBluetooth"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/green_button"
+        android:clickable="true"
+        android:text="Connect via bluetooth"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/dont_have_account" />
 
 
 
