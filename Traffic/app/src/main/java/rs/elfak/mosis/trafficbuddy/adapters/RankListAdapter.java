@@ -48,10 +48,10 @@ public class RankListAdapter extends RecyclerView.Adapter<RankListAdapter.Holder
         holder.user_name.setText(rankList.get(position).getName() + " " + rankList.get(position).getLastName());
         Picasso.get().load(rankList.get(position).getImageUrl()).into(holder.image_user);
         holder.rank_points.setText(String.valueOf(rankList.get(position).getRankPoints()));
-        if(rankList.get(position).getUid().equals(Firebase.getFirebaseAuth().getCurrentUser().getUid()))
-        {
-            holder.back.setBackgroundColor(Color.parseColor("#000000"));
-        }
+//        if(rankList.get(position).getUid().equals(Firebase.getFirebaseAuth().getCurrentUser().getUid()))
+//        {
+//            holder.back.setBackgroundColor(Color.parseColor("#000000"));
+//        }
 
     }
 

@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,8 +42,12 @@ public class BluetoothFragment extends Fragment {
     private Button listenButton;
     private Button listDevicesButton;
     private Button sendButton;
+    private Button acceptButton;
+
+
     private Button bluetoothButton;
-    private Button discoverableButton;
+    private Button bck;
+    private ImageView icon;
     private ListView listView;
     private Boolean isConfirmed = false;
     private Integer count = 0;
@@ -86,14 +91,32 @@ public class BluetoothFragment extends Fragment {
 
 
         listenButton = view.findViewById(R.id.listenButton);
+        listenButton.setVisibility(View.VISIBLE);
+
         listDevicesButton = view.findViewById(R.id.showDevicesButton);
         sendButton = view.findViewById(R.id.sendButton);
-        discoverableButton = view.findViewById(R.id.discoverableButton);
+        sendButton.setVisibility(View.INVISIBLE);
+
+
+        acceptButton = view.findViewById(R.id.accept);
+        acceptButton.setVisibility(View.INVISIBLE);
+
+
         bluetoothButton = view.findViewById(R.id.bluetoothButton);
 
         status = view.findViewById(R.id.status);
+
         msg_box = view.findViewById(R.id.msg_box);
         writeMsg = view.findViewById(R.id.writeMsg);
+
+        bck = view.findViewById(R.id.bck);
+        icon = view.findViewById(R.id.icon);
+
+        bck.setVisibility(View.INVISIBLE);
+        icon.setVisibility(View.INVISIBLE);
+        msg_box.setVisibility(View.INVISIBLE);
+        status.setVisibility(View.INVISIBLE);
+
 
         listView = (ListView) view.findViewById(R.id.listView);
         mDeviceList = new ArrayList<String>();
@@ -105,45 +128,32 @@ public class BluetoothFragment extends Fragment {
 
 
         bluetoothButton.setOnClickListener(l -> {
-            if (mBluetoothAdapter != null && !mBluetoothAdapter.isEnabled()) {
-                //Trazenje permisije usera za aktivaciju bluetooth konekcije
-                Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBluetoothIntent, REQUEST_ENABLE_BT);
+
+            if(!mBluetoothAdapter.isEnabled() || !mBluetoothAdapter.isDiscovering()) {
+                Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+                startActivityForResult(discoverableIntent, REQUEST_DISCOVER_BT);
             }
-        });
-
-        discoverableButton.setOnClickListener(l -> {
-            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-            startActivityForResult(discoverableIntent, REQUEST_DISCOVER_BT);
-
+            else
+                Toast.makeText(getContext(), "Bluetooth je vec aktivan", Toast.LENGTH_SHORT).show();
             implementListeners();
         });
 
         return view;
     }
 
-//    public void startBluetoothConnection() {
-//        //BLUETOOTH KONEKCIJA
-//        Toast.makeText(getContext(), "starting bluetooth connection", Toast.LENGTH_SHORT).show();
-//
-//        if (mBluetoothAdapter == null) {
-//            Toast.makeText(getContext(), "no adapter found", Toast.LENGTH_SHORT).show();
-//        } else {
-//            if (!mBluetoothAdapter.isEnabled()) {
-//                //Trazenje permisije usera za aktivaciju bluetooth konekcije
-//                Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//                startActivityForResult(enableBluetoothIntent, REQUEST_ENABLE_BT);
-//            } else {
-//                Toast.makeText(getContext(), "bluetooth already enabled", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
-
     private void implementListeners() {
 
         listDevicesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                sendButton.setVisibility(View.VISIBLE);
+                listenButton.setVisibility(View.INVISIBLE);
+
+                bck.setVisibility(View.VISIBLE);
+                icon.setVisibility(View.VISIBLE);
+                msg_box.setVisibility(View.VISIBLE);
+                status.setVisibility(View.VISIBLE);
+
                 Set<BluetoothDevice> bt = mBluetoothAdapter.getBondedDevices();
                 String[] strings = new String[bt.size()];
                 btArray = new BluetoothDevice[bt.size()];
@@ -161,12 +171,31 @@ public class BluetoothFragment extends Fragment {
             }
         });
 
+        acceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                String string = loggedInUser.getUid();
+                sendReceive.write(string.getBytes());
+            }
+
+        });
+
         listenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                acceptButton.setVisibility(View.VISIBLE);
+
+                bck.setVisibility(View.VISIBLE);
+                icon.setVisibility(View.VISIBLE);
+                msg_box.setVisibility(View.VISIBLE);
+                status.setVisibility(View.VISIBLE);
+
                 BluetoothFragment.ServerClass serverClass = new BluetoothFragment.ServerClass();
                 serverClass.start();
             }
+
         });
 
 
@@ -186,12 +215,6 @@ public class BluetoothFragment extends Fragment {
                 //String string = String.valueOf(writeMsg.getText());
                 String string = loggedInUser.getUid();
                 sendReceive.write(string.getBytes());
-                count++;
-                if (count == 2) {
-                    isConfirmed = true;
-                    count = 0;
-                }
-
             }
         });
     }
@@ -215,15 +238,6 @@ public class BluetoothFragment extends Fragment {
 
         });
     }
-
-
-//    public void makeDeviceDiscoverable() {
-//        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-//        startActivityForResult(discoverableIntent, REQUEST_DISCOVER_BT);
-//        discoverableBluetooth.setChecked(true);
-//        Toast.makeText(getContext(), "sad je vidljiv svima", Toast.LENGTH_SHORT).show();
-//        implementListeners();
-//    }
 
     //KOD KOJI PRIKAZUJE UREDJAJE KOJI SU TRENUTNO VIDLJIVI A NE UPARENE
 
@@ -276,10 +290,11 @@ public class BluetoothFragment extends Fragment {
                     break;
                 case STATE_MESSAGE_RECEIVED:
                     byte[] readBuff = (byte[]) msg.obj;
+                    Toast.makeText(getContext(), "stigla poruka", Toast.LENGTH_SHORT).show();
                     String tempMsg = new String(readBuff, 0, msg.arg1);
                     msg_box.setText(tempMsg);
-                    if (isConfirmed)
-                        makeFriends(tempMsg);
+                    makeFriends(tempMsg);
+
                     break;
             }
             return true;
@@ -405,9 +420,4 @@ public class BluetoothFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Toast.makeText(getContext(), "sad", Toast.LENGTH_SHORT).show();
-    }
 }

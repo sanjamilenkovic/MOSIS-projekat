@@ -62,9 +62,14 @@ public class ReportDialog extends Dialog {
         image.setImageDrawable(d);
 
 
-//        FloatingActionButton deleteMyReport = findViewById(R.id.deleteReport);
-//        if(currentReport.getReportedById().equals(currentUser.getUid()))
-//            deleteMyReport.show();
+        FloatingActionButton deleteMyReport = findViewById(R.id.deleteReport);
+        if(currentReport.getReportedById().equals(Firebase.getFirebaseAuth().getCurrentUser().getUid()))
+            deleteMyReport.show();
+
+        deleteMyReport.setOnClickListener(l -> {
+            Firebase.getDbRef().child(Firebase.DB_REPORTS).child(currentReport.getId()).removeValue();
+            dismiss();
+        });
 
         TextView lat = findViewById(R.id.edit_text_lat);
         lat.setText(currentReport.getLat() + "");

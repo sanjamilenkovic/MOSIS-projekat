@@ -29,6 +29,7 @@ public class FilterDialog extends Dialog implements AddReportItemAdapter.IconCli
     private FilterClickListener filterClickListener;
 
     EditText _editText;
+    EditText radius;
     private int _day;
     private int _month;
     private int _birthYear;
@@ -68,8 +69,10 @@ public class FilterDialog extends Dialog implements AddReportItemAdapter.IconCli
         recyclerView.setAdapter(adapter);
 
         Button buttonFilterReports = findViewById(R.id.btn_filter_reports);
-        _editText = findViewById(R.id.Birthday);
+        _editText = findViewById(R.id.date);
         _editText.setOnClickListener(this);
+
+        //radius = findViewById(R.id.radius);
 
         buttonFilterReports.setOnClickListener(l ->
         {

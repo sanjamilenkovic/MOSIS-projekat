@@ -3,10 +3,13 @@ package rs.elfak.mosis.trafficbuddy;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -15,10 +18,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
@@ -34,7 +40,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationTokenSource;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.core.Repo;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -57,6 +62,7 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
     private GoogleMap googleMap;
     private Boolean flag = true;
     private List<MarkerOptions> googleMapMarkers;
+    private EditText searchMap;
     private Boolean allUsersAreSelected = true;
     private Boolean allReportsAreSelected = false;
     private List<Target> markerTargets;
@@ -223,6 +229,10 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
         }
     }
 
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -235,6 +245,25 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
         mMapViewFullScreen.onCreate(savedInstanceState);
         mMapViewFullScreen.onResume(); // needed to get the map to display immediately
         cancellationTokenSource = new CancellationTokenSource();
+
+        searchMap = view.findViewById(R.id.searchMap);
+        searchMap.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Perform action on key press
+
+                    hideKeyboardFrom(getContext(), view);
+                    Toast.makeText(getContext(), searchMap.getText(), Toast.LENGTH_SHORT).show();
+                    prikaziFiltriraneReportove(searchMap.getText().toString(), "22-04-2021");
+                    searchMap.setText(" ");
+
+                    return true;
+                }
+                return false;
+            }
+        });
 
         FloatingActionButton addNewReport = view.findViewById(R.id.fab_add_report);
         FloatingActionButton filterDate = view.findViewById(R.id.fab_filter_date);
@@ -330,6 +359,19 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
                         }
                     }
                 }
+
+//            if (!(radius == null || radius.length() == 0)) {
+//                LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+//                @SuppressLint("MissingPermission") Location myLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//                double distance = Double.parseDouble(radius);
+//
+//                filteredReports.removeIf(d -> {
+//                    Location currentLocation = new Location("");
+//                    currentLocation.setLongitude(d.getLon());
+//                    currentLocation.setLatitude(d.getLat());
+//                    return myLocation.distanceTo(currentLocation) > distance;
+//                });
+//            }
 
             if (filteredReports.size() > 0)
                 showAllReports(filteredReports);

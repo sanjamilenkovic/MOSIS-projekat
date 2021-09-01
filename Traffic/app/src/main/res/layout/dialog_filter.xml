@@ -41,20 +41,54 @@
         app:layout_constraintEnd_toEndOf="@id/guideline_right"
         tools:listitem="@layout/rv_item_report_image" />
 
+
     <EditText
-        android:id="@+id/Birthday"
-        android:layout_width="wrap_content"
+        android:id="@+id/date"
+        android:background="@drawable/rounded_corner"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Pick date"
+        android:textColor="@color/white"
+        android:focusable="false"
         android:clickable="false"
         android:cursorVisible="false"
-        android:focusable="false"
         android:focusableInTouchMode="false"
-        android:hint="birhtday"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="@+id/backgroundAddReport"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/rv_report_image_holder" />
+        app:layout_constraintTop_toBottomOf="@id/guideline"
+        app:layout_constraintEnd_toEndOf="@id/guideline_right"
+        android:layout_width="wrap_content" />
 
+<!--    <EditText-->
+<!--        android:id="@+id/time"-->
+<!--        android:background="@drawable/rounded_corner"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:text="Pick time"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:focusable="false"-->
+<!--        android:clickable="false"-->
+<!--        android:cursorVisible="false"-->
+<!--        android:focusableInTouchMode="false"-->
+<!--        app:layout_constraintStart_toEndOf="@id/guideline_left"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/date"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/guideline_right"-->
+<!--        android:layout_width="wrap_content" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/radius"-->
+<!--        android:background="@drawable/rounded_corner"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:text="Radius"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:focusable="false"-->
+<!--        android:clickable="false"-->
+<!--        android:cursorVisible="false"-->
+<!--        android:focusableInTouchMode="false"-->
+<!--        app:layout_constraintStart_toEndOf="@id/guideline_left"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/time"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/guideline_right"-->
+<!--        android:layout_width="wrap_content" />-->
 
     <Button
         android:id="@+id/btn_filter_reports"
@@ -67,7 +101,7 @@
         app:layout_constraintBottom_toBottomOf="@id/backgroundAddReport"
         app:layout_constraintEnd_toEndOf="@id/backgroundAddReport"
         app:layout_constraintStart_toStartOf="@id/backgroundAddReport"
-        app:layout_constraintTop_toBottomOf="@id/Birthday"/>
+        app:layout_constraintTop_toBottomOf="@id/date"/>
 
 
     <androidx.constraintlayout.widget.Guideline

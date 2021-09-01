@@ -44,7 +44,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logo"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/guideline_bottom"
         tools:listitem="@layout/rv_item_friend" />
+
+
 
 
     <androidx.constraintlayout.widget.Guideline
