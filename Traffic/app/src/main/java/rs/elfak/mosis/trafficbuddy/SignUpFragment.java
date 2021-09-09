@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -57,6 +58,7 @@ public class SignUpFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         firebaseAuth = Firebase.getFirebaseAuth();
+
 
     }
 
@@ -199,7 +201,17 @@ public class SignUpFragment extends Fragment {
                                             Firebase.getDbRef().child(Firebase.DB_USERS).child(uid).setValue(dbUser).addOnSuccessListener(unused -> {
                                                 Toast.makeText(getActivity(), "Uspesno ste se registrovali",
                                                         Toast.LENGTH_SHORT).show();
+                                                SignInFragment nextFrag = new SignInFragment();
+
+                                                getActivity().getSupportFragmentManager().beginTransaction()
+                                                        .replace(R.id.nav_host_fragment, nextFrag, "bluetooth")
+                                                        .addToBackStack(null)
+                                                        .commit();
+                                                FirebaseAuth current = FirebaseAuth.getInstance();
+                                                current.signOut();
                                                 });
+
+
                                         });
                                     });
 
@@ -209,6 +221,8 @@ public class SignUpFragment extends Fragment {
                             signUpButton.setEnabled(true);
                             Toast.makeText(getActivity(), "Authentication failed: " + task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
+
+
                         }
                     }
                 });

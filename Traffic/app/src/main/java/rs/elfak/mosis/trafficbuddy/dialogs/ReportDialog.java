@@ -101,7 +101,7 @@ public class ReportDialog extends Dialog {
                 Rating rating = rat.getValue(Rating.class);
                 if (rating.getRatedById().equals(currentUserId) && rating.getRatedReportId().equals(currentReport.getId())) {
                     currentRating = rating;
-                    Toast.makeText(getContext(), rating.toString(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), rating.toString(), Toast.LENGTH_SHORT).show();
                     liked = true;
                     thumbUp.setColorFilter(c.getResources().getColor(R.color.light_green));
                 }

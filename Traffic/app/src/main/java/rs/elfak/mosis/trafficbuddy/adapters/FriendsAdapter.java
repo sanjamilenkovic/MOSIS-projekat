@@ -3,6 +3,8 @@ package rs.elfak.mosis.trafficbuddy.adapters;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,31 +18,18 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import rs.elfak.mosis.trafficbuddy.FriendsFragment;
 import rs.elfak.mosis.trafficbuddy.R;
-import rs.elfak.mosis.trafficbuddy.data.Report;
 import rs.elfak.mosis.trafficbuddy.data.User;
 import rs.elfak.mosis.trafficbuddy.dialogs.FriendDialog;
-import rs.elfak.mosis.trafficbuddy.dialogs.ReportDialog;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.Holder> {
 
-    private ArrayList<User> myFriends = new ArrayList<>(0);
+    private ArrayList<User> myFriends = new ArrayList<>(1);
     private final LayoutInflater mInflater;
 
 
     public FriendsAdapter(Context context) {
         this.mInflater = LayoutInflater.from(context);
-        User u = new User();
-        u.setName("Sanja");
-        u.setLastName("Milenkovic");
-        u.setUsername("sanja");
-        myFriends.add(u);
-
-        u.setName("Petar");
-        u.setLastName("Djordjevic");
-        u.setUsername("petar");
-        myFriends.add(u);
     }
 
     @NonNull
@@ -57,7 +46,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.Holder> 
         holder.username.setText("@" + myFriends.get(position).getUsername());
         Picasso.get().load(myFriends.get(position).getImageUrl()).into(holder.profilePicture);
         holder.imePrezime.setTag(position);
-
     }
 
     @Override

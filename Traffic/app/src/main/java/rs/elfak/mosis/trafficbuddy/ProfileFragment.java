@@ -1,12 +1,15 @@
 package rs.elfak.mosis.trafficbuddy;
 
 import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -24,6 +27,7 @@ public class ProfileFragment extends Fragment {
 
     private FirebaseAuth firebaseAuth;
     private User user;
+    Button dugme;
     CircleImageView userPhoto;
     EditText userName;
     EditText userLastName;
@@ -38,6 +42,15 @@ public class ProfileFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        dugme = view.findViewById(R.id.dugme);
+        dugme.setOnClickListener(l -> {
+            firebaseAuth.signOut();
+            Toast.makeText(getContext(), "Izlogovan user", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getContext(), MainActivity.class));
+
+        });
         userPhoto = view.findViewById(R.id.image_edit);
         userName = view.findViewById(R.id.edit_name);
         userLastName = view.findViewById(R.id.edit_last_name);

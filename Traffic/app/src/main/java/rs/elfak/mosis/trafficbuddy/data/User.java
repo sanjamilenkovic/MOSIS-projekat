@@ -14,7 +14,7 @@ public class User implements Comparable<User> {
 
     private String imageUrl;
     private String rank;
-    private int rankPoints; // 0-2 newbie; 3-5 party guy; 6+ party monster
+    private int rankPoints;
     private double lat;
     private double lon;
     private List<String> friends;
@@ -110,9 +110,9 @@ public class User implements Comparable<User> {
         if (rankPoints < 3)
             rank = "Newbie";
         else if (rankPoints < 6)
-            rank = "Party guy";
+            rank = "Medior traffic buddy";
         else
-            rank = "Party monster";
+            rank = "Senior traffic buddy";
     }
 
     public double getLon() {

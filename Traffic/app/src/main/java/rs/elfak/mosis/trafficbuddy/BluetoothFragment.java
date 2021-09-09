@@ -239,37 +239,6 @@ public class BluetoothFragment extends Fragment {
         });
     }
 
-    //KOD KOJI PRIKAZUJE UREDJAJE KOJI SU TRENUTNO VIDLJIVI A NE UPARENE
-
-
-//        mBluetoothAdapter.startDiscovery();
-//        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-//        getActivity().registerReceiver(mReceiver, filter);
-//
-//    }
-//
-//    @Override
-//    public void onDestroy() {
-//        getActivity().unregisterReceiver(mReceiver);
-//        super.onDestroy();
-//    }
-//
-//
-//    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-//        public void onReceive(Context context, Intent intent) {
-//            String action = intent.getAction();
-//            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-//                BluetoothDevice device = intent
-//                        .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-//                mDeviceList.add(device.getName() + "\n" + device.getAddress());
-//
-//
-//                listView.setAdapter(new ArrayAdapter<String>(context,
-//                        android.R.layout.simple_list_item_1, mDeviceList));
-//            }
-//        }
-//    };
-
 
     Handler handler = new Handler(new Handler.Callback() {
         @Override

@@ -268,6 +268,18 @@
         app:layout_constraintStart_toEndOf="@+id/phone_icon"
         app:layout_constraintTop_toTopOf="@id/phone_bck" />
 
+    <Button
+        android:id="@+id/dugme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/orange_button"
+        app:layout_constraintTop_toBottomOf="@id/rank_bck"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp"
+        android:text="Sign out"
+        />
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_80"

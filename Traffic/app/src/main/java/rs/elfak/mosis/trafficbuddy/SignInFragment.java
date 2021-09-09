@@ -45,6 +45,10 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         firebaseAuth = Firebase.getFirebaseAuth();
+
+        if (firebaseAuth.getCurrentUser() != null) {
+            startActivity(new Intent(getContext(), MapActivity.class));
+        }
     }
     @Override
     public void onStart() {

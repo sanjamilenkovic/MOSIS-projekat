@@ -97,7 +97,7 @@ public class AddReportDialog extends Dialog implements AddReportItemAdapter.Icon
                         newReport.setDate(currentDate);
                         newReport.setTime(currentTime);
                         newReport.setDescription(String.valueOf(editDescription.getText()));
-                        newReport.setTitle(String.valueOf(editDescription.getText()));
+                        newReport.setTitle(String.valueOf(editTitle.getText()));
                         newReport.setLat(latLng.latitude);
                         newReport.setLon(latLng.longitude);
                         newReport.setReportedById(currentUserId);

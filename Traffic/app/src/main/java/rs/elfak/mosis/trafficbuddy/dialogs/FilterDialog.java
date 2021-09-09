@@ -29,7 +29,7 @@ public class FilterDialog extends Dialog implements AddReportItemAdapter.IconCli
     private FilterClickListener filterClickListener;
 
     EditText _editText;
-    EditText radius;
+    EditText radiusEdit;
     private int _day;
     private int _month;
     private int _birthYear;
@@ -72,12 +72,12 @@ public class FilterDialog extends Dialog implements AddReportItemAdapter.IconCli
         _editText = findViewById(R.id.date);
         _editText.setOnClickListener(this);
 
-        //radius = findViewById(R.id.radius);
+        radiusEdit = findViewById(R.id.radius);
 
         buttonFilterReports.setOnClickListener(l ->
         {
 
-            filterClickListener.onIconClick(reportType, newDate);
+            filterClickListener.onIconClick(reportType, newDate, String.valueOf(radiusEdit.getText()));
             dismiss();
 
         });
@@ -124,7 +124,9 @@ public class FilterDialog extends Dialog implements AddReportItemAdapter.IconCli
     }
 
     public interface FilterClickListener {
-        void onIconClick(String title, String date);
+        void onBackPressed();
+
+        void onIconClick(String title, String date, String radius);
     }
 }
 

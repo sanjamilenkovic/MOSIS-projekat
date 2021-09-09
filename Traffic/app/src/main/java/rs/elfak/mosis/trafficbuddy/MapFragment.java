@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -40,6 +41,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.CancellationTokenSource;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.core.Repo;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -47,6 +49,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import rs.elfak.mosis.trafficbuddy.data.Report;
 import rs.elfak.mosis.trafficbuddy.data.User;
@@ -85,6 +88,7 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
                             @Override
                             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                                 MarkerOptions marker = new MarkerOptions();
+
                                 marker.position(new LatLng(u.getLat(), u.getLon()));
                                 marker.title(u.getName());
                                 marker.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
@@ -163,7 +167,7 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
 
     final GoogleMap.OnInfoWindowClickListener reportClickListener = marker -> {
 
-        Toast.makeText(getContext(), "Report Selected", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "Report Selected", Toast.LENGTH_SHORT).show();
 
         String idReport = marker.getSnippet();
         Toast.makeText(getContext(), idReport, Toast.LENGTH_SHORT).show();
@@ -176,10 +180,10 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
     };
 
     final GoogleMap.OnInfoWindowClickListener userClickListener = marker -> {
-        Toast.makeText(getContext(), "User selected", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "User selected", Toast.LENGTH_SHORT).show();
 
         String idFriend = marker.getSnippet();
-        Toast.makeText(getContext(), idFriend, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), idFriend, Toast.LENGTH_SHORT).show();
 
         Firebase.getDbRef().child(Firebase.DB_USERS).child(idFriend).get().addOnSuccessListener(snapshot -> {
             User friend = snapshot.getValue(User.class);
@@ -198,6 +202,7 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
             markerTargets.add(new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+
                     MarkerOptions marker = new MarkerOptions();
                     marker.position(new LatLng(d.getLat(), d.getLon()));
                     marker.title(d.getTitle());
@@ -208,6 +213,7 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
                     googleMapMarkers.add(marker);
                     googleMap.addMarker(marker);
                     googleMap.setOnInfoWindowClickListener(reportClickListener);
+
                 }
 
                 @Override
@@ -256,7 +262,8 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
 
                     hideKeyboardFrom(getContext(), view);
                     Toast.makeText(getContext(), searchMap.getText(), Toast.LENGTH_SHORT).show();
-                    prikaziFiltriraneReportove(searchMap.getText().toString(), "22-04-2021");
+                    String s = searchMap.getText().toString().toLowerCase();
+                    prikaziFiltriraneReportove(s, null, null);
                     searchMap.setText(" ");
 
                     return true;
@@ -332,7 +339,17 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void prikaziFiltriraneReportove(String title, String startDate) {
+    private void prikaziFiltriraneReportove(String title, String startDate, String radius) {
+
+        flag = !flag;
+        if (flag) {
+            allReportsAreSelected = false;
+            allUsersAreSelected = true;
+        } else {
+            allReportsAreSelected = true;
+            allUsersAreSelected = false;
+
+        }
 
         Firebase.getDbRef().child(Firebase.DB_REPORTS).get().addOnSuccessListener(snapshot -> {
             ArrayList<Report> all = new ArrayList<>();
@@ -344,34 +361,44 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
             ArrayList<Report> filteredReports = new ArrayList<Report>();
             @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-            if (title != null)
-                for (Report report : all) {
-                    String iconTitle = report.getIconTitle();
-                    String dateAdded = report.getDate();
-                    if (startDate != null) {
-                        try {
-                            if (iconTitle.equals(title) && (sdf.parse(startDate).before(sdf.parse(dateAdded)))) {
-                                filteredReports.add(report);
-                                //Toast.makeText(getContext(), report.getTitle() , Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+            filteredReports = all;
+
+            if (!(radius == null || radius.length() == 0)) {
+                LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+                @SuppressLint("MissingPermission") Location myLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                double distance = Double.parseDouble(radius);
+
+                filteredReports.removeIf(d -> {
+                    Location currentLocation = new Location("");
+                    currentLocation.setLongitude(d.getLon());
+                    currentLocation.setLatitude(d.getLat());
+                    return myLocation.distanceTo(currentLocation) > distance;
+                });
+            }
+
+            if (title != null) {
+                filteredReports.removeIf(
+                        d -> !d.getIconTitle().equals(title)
+                );
+            }
+
+            if (startDate != null) {
+                ArrayList<Report> filtered2 = new ArrayList<>(filteredReports);
+
+                filteredReports.clear();
+
+                for (Report r : filtered2) {
+                    String dateAdded = r.getDate();
+                    try {
+                        if (sdf.parse(startDate).before(sdf.parse(dateAdded))) {
+                            filteredReports.add(r);
                         }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
                 }
+            }
 
-//            if (!(radius == null || radius.length() == 0)) {
-//                LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-//                @SuppressLint("MissingPermission") Location myLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//                double distance = Double.parseDouble(radius);
-//
-//                filteredReports.removeIf(d -> {
-//                    Location currentLocation = new Location("");
-//                    currentLocation.setLongitude(d.getLon());
-//                    currentLocation.setLatitude(d.getLat());
-//                    return myLocation.distanceTo(currentLocation) > distance;
-//                });
-//            }
 
             if (filteredReports.size() > 0)
                 showAllReports(filteredReports);
@@ -380,6 +407,15 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
                 showAllReports(all);
             }
         });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
 
     }
 
@@ -403,8 +439,10 @@ public class MapFragment extends Fragment implements FilterDialog.FilterClickLis
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    public void onIconClick(String title, String date) {
-        Toast.makeText(getContext(), "vraceno " + title + " " + date, Toast.LENGTH_SHORT).show();
-        prikaziFiltriraneReportove(title, date);
+    public void onIconClick(String title, String date, String radius) {
+        Toast.makeText(getContext(), "vraceno " + title + " " + date + " " + radius, Toast.LENGTH_SHORT).show();
+        prikaziFiltriraneReportove(title, date, radius);
     }
+
+
 }
